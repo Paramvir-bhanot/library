@@ -2,6 +2,15 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+## Environment Variables
+
+Create a `.env.local` file in the project root (or update the existing one):
+
+```bash
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_long_random_secret
+```
+
 First, run the development server:
 
 ```bash
