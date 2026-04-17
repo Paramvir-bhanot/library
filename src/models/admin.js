@@ -1,6 +1,5 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 const adminSchema = mongoose.Schema({
   name: {
     type: String,

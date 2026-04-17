@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import Link from "next/link";  
 export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-[#F7DDE2]">
