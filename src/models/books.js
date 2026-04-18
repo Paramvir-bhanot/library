@@ -21,10 +21,8 @@ const bookSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: {
-        values: ['Fiction', 'Non-Fiction', 'Science Fiction', 'Mystery', 'Biography', 'History'],
-        message: 'Category must be one of: Fiction, Non-Fiction, Science Fiction, Mystery, Biography, History',
-      },
+      trim: true,
+      maxlength: [100, 'Category cannot be more than 100 characters'],
     },
     price: {
       type: Number,
@@ -36,23 +34,22 @@ const bookSchema = new mongoose.Schema(
       type: String,
       trim: true,
       match: [
-        /^https?:\/\/.+/,
-        'Please provide a valid image URL (starting with http:// or https://)',
+        /^(https?:\/\/.+|\/uploads\/.+)/,
+        'Please provide a valid image URL (http://, https://, or /uploads/ path)',
       ],
+    },
+    pdfUrl: {
+      type: String,
+      trim: true,
+    },
+    pdfFileName: {
+      type: String,
+      trim: true,
     },
     publishedDate: {
       type: Date,
     },
-    isbn: {
-      type: String,
-      unique: true,
-      sparse: true, // Allows multiple documents without ISBN
-      trim: true,
-      match: [
-        /^(?:ISBN(?:-1[03])?:?[ ]?)?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[X0-9]/,
-        'Please provide a valid ISBN',
-      ],
-    },
+  
     pages: {
       type: Number,
       min: [1, 'Pages must be at least 1'],
