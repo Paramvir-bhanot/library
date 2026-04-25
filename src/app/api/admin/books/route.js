@@ -4,6 +4,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import Book from '@/src/models/books';
 import connectDB from '@/src/lib/DBconnection';
+import { isValidBookCategory } from '@/src/lib/bookCategories';
 
 const UPLOAD_DIR = path.join(process.cwd(), 'public/uploads');
 
@@ -85,6 +86,16 @@ export async function POST(request) {
 
     const formData = await request.formData();
     const payload = parseBookFields(formData);
+
+    if (!isValidBookCategory(payload.category)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Invalid category. Choose a category from knowlage.json options.',
+        },
+        { status: 400 }
+      );
+    }
 
     const coverImage = formData.get('coverImage');
     if (coverImage && coverImage.size > 0) {

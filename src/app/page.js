@@ -21,7 +21,7 @@ const staggerContainer = {
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-background text-text-primary font-sans">
-      <Header />
+    
       <HeroSection />
       <FeaturedBooks />
       <CategoriesSection />
@@ -31,37 +31,6 @@ export default function HomePage() {
   );
 }
 
-// ---------- Header ----------
-function Header() {
-  return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-border-light"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <h1 className="text-2xl font-serif font-bold tracking-tight text-primary">
-          My Library Hub
-        </h1>
-        <nav className="hidden md:flex space-x-8">
-          {["Home", "Catalog", "Categories", "About"].map((item) => (
-            <a
-              key={item}
-              href="#"
-              className="text-text-secondary hover:text-primary transition-colors duration-200"
-            >
-              {item}
-            </a>
-          ))}
-        </nav>
-        <button className="px-4 py-2 border border-primary text-primary rounded-full text-sm font-medium hover:bg-primary hover:text-black transition-colors duration-300">
-          Sign In
-        </button>
-      </div>
-    </motion.header>
-  );
-}
 
 // ---------- Hero Section ----------
 function HeroSection() {

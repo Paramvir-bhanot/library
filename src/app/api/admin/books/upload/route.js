@@ -1,63 +1,51 @@
-import { writeFile, mkdir, readFile } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
 import { NextResponse } from 'next/server';
-import { v4 as uuidv4 } from 'uuid';
-import mega from 'megajs';
+import { mkdir, unlink, writeFile } from 'fs/promises';
+import { existsSync } from 'fs';
+import path from 'path';
 import Book from '@/src/models/books';
 import connectDB from '@/src/lib/DBconnection';
 
-const UPLOAD_DIR = join(process.cwd(), 'public', 'uploads');
+const PDF_DIR = path.join(process.cwd(), 'public/uploads/pdfs');
+const MAX_PDF_SIZE = 100 * 1024 * 1024;
 
-async function ensureUploadDir() {
-  if (!existsSync(UPLOAD_DIR)) {
-    await mkdir(UPLOAD_DIR, { recursive: true });
+async function removeLocalUpload(fileUrl) {
+  if (!fileUrl || typeof fileUrl !== 'string' || !fileUrl.startsWith('/uploads/')) {
+    return;
   }
-}
 
-async function uploadToMega(filePath, fileName) {
-  try {
-    // Initialize Mega storage
-    const storage = new mega.Storage({
-      email: process.env.MEGA_EMAIL,
-      password: process.env.MEGA_PASSWORD,
-    });
-
-    await storage.ready;
-
-    // Read file and upload
-    const file = await readFile(filePath);
-    const uploadedFile = await storage.upload({
-      name: fileName,
-      size: file.length,
-    }, file).complete;
-
-    // Get the download link
-    const downloadLink = uploadedFile.downloadUrl;
-
-    return downloadLink;
-  } catch (error) {
-    console.error('Mega upload error:', error);
-    throw new Error('Failed to upload file to Mega storage');
+  const filePath = path.join(process.cwd(), 'public', fileUrl.replace(/^\//, ''));
+  if (existsSync(filePath)) {
+    await unlink(filePath);
   }
 }
 
 export async function POST(request) {
   try {
-    // Connect to MongoDB
     await connectDB();
 
     const id = request.nextUrl.searchParams.get('id');
-
-    // Validate book ID
     if (!id) {
       return NextResponse.json(
-        { success: false, message: 'Book ID is required' },
+        { success: false, message: 'Book id is required' },
         { status: 400 }
       );
     }
 
-    // Check if book exists
+    const { file, fileName } = await request.json();
+    if (!file || !fileName) {
+      return NextResponse.json(
+        { success: false, message: 'file and fileName are required' },
+        { status: 400 }
+      );
+    }
+
+    if (!fileName.toLowerCase().endsWith('.pdf')) {
+      return NextResponse.json(
+        { success: false, message: 'Only PDF files are allowed' },
+        { status: 400 }
+      );
+    }
+
     const book = await Book.findById(id);
     if (!book) {
       return NextResponse.json(
@@ -66,41 +54,34 @@ export async function POST(request) {
       );
     }
 
-    // Get the file from request body
-    const { file, fileName } = await request.json();
-
-    if (!file || !fileName) {
-      return NextResponse.json(
-        { success: false, message: 'File and fileName are required' },
-        { status: 400 }
-      );
-    }
-
-    // Validate file type (PDF only)
-    const fileExtension = fileName.split('.').pop().toLowerCase();
-    if (fileExtension !== 'pdf') {
-      return NextResponse.json(
-        { success: false, message: 'Only PDF files are allowed' },
-        { status: 400 }
-      );
-    }
-
-    // Create unique file name
-    const uniqueFileName = `${id}_${uuidv4()}.pdf`;
-    const filePath = join(UPLOAD_DIR, uniqueFileName);
-
-    // Ensure upload directory exists
-    await ensureUploadDir();
-
-    // Convert base64 to buffer and write file
     const buffer = Buffer.from(file, 'base64');
-    await writeFile(filePath, buffer);
+    if (!buffer.length) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid PDF payload' },
+        { status: 400 }
+      );
+    }
 
-    // Upload to Mega
-    const megaDownloadLink = await uploadToMega(filePath, uniqueFileName);
+    if (buffer.length > MAX_PDF_SIZE) {
+      return NextResponse.json(
+        { success: false, message: 'PDF size exceeds 100MB limit' },
+        { status: 413 }
+      );
+    }
 
-    // Update book with PDF link
-    book.pdfUrl = megaDownloadLink;
+    if (!existsSync(PDF_DIR)) {
+      await mkdir(PDF_DIR, { recursive: true });
+    }
+
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    const savedName = `pdf-${uniqueSuffix}.pdf`;
+    const savedPath = path.join(PDF_DIR, savedName);
+
+    await writeFile(savedPath, buffer);
+
+    await removeLocalUpload(book.pdfUrl);
+
+    book.pdfUrl = `/uploads/pdfs/${savedName}`;
     book.pdfFileName = fileName;
     await book.save();
 
@@ -109,23 +90,17 @@ export async function POST(request) {
         success: true,
         message: 'PDF uploaded successfully',
         data: {
-          bookId: id,
-          fileName,
-          megaLink: megaDownloadLink,
-          pdfUrl: megaDownloadLink,
+          pdfUrl: book.pdfUrl,
+          pdfFileName: book.pdfFileName,
         },
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Upload error:', error);
     return NextResponse.json(
-      {
-        success: false,
-        message: 'Error uploading file',
-        error: error.message,
-      },
+      { success: false, message: error.message || 'PDF upload failed' },
       { status: 500 }
     );
   }
 }
+

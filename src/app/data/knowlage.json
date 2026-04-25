@@ -1,0 +1,1135 @@
+{
+  "university": "Lovely Professional University",
+  "mode": "Distance / Online",
+  "departments": [
+    {
+      "name": "Arts",
+      "courses": [
+        {
+          "course_name": "BA",
+          "duration": "3 Years",
+          "description": "The Bachelor of Arts (BA) distance program offers a flexible and comprehensive foundation in humanities and social sciences. It develops critical thinking, communication, and analytical skills across multiple disciplines, preparing students for careers in education, civil services, media, and further academic pursuits.",
+          "eligibility": "10+2 or equivalent in any stream from a recognized board.",
+          "career_opportunities": [
+            "Civil Services",
+            "Content Writer",
+            "Social Worker",
+            "Teacher (after B.Ed)",
+            "Journalist",
+            "Public Relations Officer"
+          ],
+          "subjects": [
+            "English",
+            "Political Science",
+            "History",
+            "Sociology",
+            "Economics",
+            "Punjabi"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "English Communication Skills",
+                    "description": "Fundamentals of grammar, vocabulary building, and written communication.",
+                    "topics": ["Parts of Speech", "Sentence Structure", "Paragraph Writing", "Comprehension"]
+                  },
+                  {
+                    "name": "Introduction to Political Theory",
+                    "description": "Basic concepts of political science and key ideologies.",
+                    "topics": ["State", "Sovereignty", "Liberty", "Equality", "Justice"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "History of India (Ancient Period)",
+                    "description": "Study of Indian history from prehistoric times to 1200 AD.",
+                    "topics": ["Harappan Civilization", "Vedic Age", "Mauryan Empire", "Gupta Period"]
+                  },
+                  {
+                    "name": "Introduction to Sociology",
+                    "description": "Core sociological concepts and social institutions.",
+                    "topics": ["Social Groups", "Culture", "Family", "Religion", "Social Stratification"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Microeconomics",
+                    "description": "Principles of individual economic units and market mechanisms.",
+                    "topics": ["Demand and Supply", "Elasticity", "Consumer Behavior", "Production and Cost"]
+                  },
+                  {
+                    "name": "Punjabi Literature (Prose)",
+                    "description": "Study of prominent Punjabi prose writers and essays.",
+                    "topics": ["Warish Shah", "Nanak Singh", "Modern Punjabi Short Stories"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Modern Indian History",
+                    "description": "India's struggle for independence and post-independence consolidation.",
+                    "topics": ["Revolt of 1857", "Indian National Movement", "Gandhian Era", "Partition"]
+                  },
+                  {
+                    "name": "Social Research Methods",
+                    "description": "Introduction to qualitative and quantitative research in social sciences.",
+                    "topics": ["Research Design", "Sampling Techniques", "Data Collection", "Ethics in Research"]
+                  }
+                ]
+              },
+              {
+                "semester": 5,
+                "subjects": [
+                  {
+                    "name": "Macroeconomics",
+                    "description": "Analysis of economy-wide phenomena and policy implications.",
+                    "topics": ["National Income", "Inflation", "Monetary Policy", "Fiscal Policy"]
+                  },
+                  {
+                    "name": "Contemporary Political Issues",
+                    "description": "Examination of current national and international political developments.",
+                    "topics": ["Globalization", "Environment Politics", "Human Rights", "Electoral Reforms"]
+                  }
+                ]
+              },
+              {
+                "semester": 6,
+                "subjects": [
+                  {
+                    "name": "Sociology of Change and Development",
+                    "description": "Theories and patterns of social change with special reference to India.",
+                    "topics": ["Modernization", "Urbanization", "Globalization", "Social Movements"]
+                  },
+                  {
+                    "name": "Project Work / Dissertation",
+                    "description": "Independent research on a chosen topic under faculty guidance.",
+                    "topics": ["Literature Review", "Data Analysis", "Report Writing", "Presentation"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "course_name": "MA",
+          "duration": "2 Years",
+          "description": "The Master of Arts (MA) distance program provides advanced knowledge and research orientation in specialized disciplines. It is designed for graduates seeking expertise in humanities and social sciences, leading to careers in academia, research, public policy, and senior administrative roles.",
+          "eligibility": "Bachelor's degree in any discipline from a recognized university.",
+          "career_opportunities": [
+            "Assistant Professor (with NET/SET)",
+            "Research Analyst",
+            "Policy Advisor",
+            "Content Strategist",
+            "Public Administration Officer",
+            "Corporate Communications Manager"
+          ],
+          "subjects": [
+            "English Literature",
+            "Political Theory",
+            "Modern History",
+            "Social Research",
+            "Public Administration"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Literary Criticism and Theory",
+                    "description": "Major critical approaches from classical to contemporary times.",
+                    "topics": ["Plato and Aristotle", "New Criticism", "Structuralism", "Post-structuralism"]
+                  },
+                  {
+                    "name": "Advanced Political Theory",
+                    "description": "In-depth analysis of key political concepts and ideologies.",
+                    "topics": ["Democracy", "Citizenship", "Multiculturalism", "Feminism"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Research Methodology",
+                    "description": "Advanced tools and techniques for social science research.",
+                    "topics": ["Quantitative Methods", "SPSS", "Qualitative Analysis", "Academic Writing"]
+                  },
+                  {
+                    "name": "Modern Indian Political Thought",
+                    "description": "Political ideas of leading Indian thinkers.",
+                    "topics": ["Raja Rammohan Roy", "Tilak", "Gandhi", "Ambedkar", "Nehru"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Modern World History",
+                    "description": "Global historical transformations from 1789 to 1945.",
+                    "topics": ["French Revolution", "Industrial Revolution", "World Wars", "Cold War Origins"]
+                  },
+                  {
+                    "name": "Public Administration: Principles and Practices",
+                    "description": "Theoretical foundations and functioning of administrative systems.",
+                    "topics": ["Bureaucracy", "Development Administration", "Financial Administration", "Accountability"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Indian English Literature",
+                    "description": "Study of major Indian authors writing in English.",
+                    "topics": ["Mulk Raj Anand", "R.K. Narayan", "Arundhati Roy", "Postcolonial Theory"]
+                  },
+                  {
+                    "name": "Dissertation",
+                    "description": "Original research work culminating in a thesis submission.",
+                    "topics": ["Topic Selection", "Literature Review", "Data Collection and Analysis", "Thesis Writing"]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Library & Information Science",
+      "courses": [
+        {
+          "course_name": "B.Lib.I.Sc",
+          "duration": "1 Year",
+          "description": "The Bachelor of Library and Information Science (B.Lib.I.Sc) is a one-year professional program that equips students with the skills required to manage libraries and information centers effectively. The curriculum covers classification, cataloguing, and digital library management, preparing graduates for roles in academic, public, and special libraries.",
+          "eligibility": "Bachelor's degree in any discipline.",
+          "career_opportunities": [
+            "Librarian",
+            "Information Officer",
+            "Cataloguer",
+            "Archivist",
+            "Library Assistant",
+            "Digital Content Manager"
+          ],
+          "subjects": [
+            "Library Classification",
+            "Cataloguing",
+            "Information Sources",
+            "Library Management",
+            "Digital Libraries"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Library and Society",
+                    "description": "Foundations of librarianship and role of libraries in society.",
+                    "topics": ["Five Laws of Library Science", "Types of Libraries", "Library Legislation", "Professional Ethics"]
+                  },
+                  {
+                    "name": "Library Classification (Theory)",
+                    "description": "Principles and schemes of document classification.",
+                    "topics": ["DDC", "Colon Classification", "Classification of Electronic Resources"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Library Cataloguing (Theory)",
+                    "description": "Standards and rules for bibliographic description.",
+                    "topics": ["AACR-2", "MARC 21", "RDA", "Subject Headings (LCSH)"]
+                  },
+                  {
+                    "name": "Information Sources and Services",
+                    "description": "Reference sources and user services in libraries.",
+                    "topics": ["Dictionaries", "Encyclopedias", "Bibliographies", "Reference Interview", "CAS", "SDI"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Library Management",
+                    "description": "Principles of administration applied to libraries.",
+                    "topics": ["Planning", "Human Resource Management", "Budgeting", "Library Statistics", "TQM"]
+                  },
+                  {
+                    "name": "Digital Libraries and IT Applications",
+                    "description": "Introduction to digital library software and services.",
+                    "topics": ["Institutional Repositories (DSpace)", "Open Source Software", "E-resources Management", "Plagiarism Tools"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "course_name": "M.Lib.I.Sc",
+          "duration": "1 Year",
+          "description": "The Master of Library and Information Science (M.Lib.I.Sc) is an advanced program focusing on research methodology, ICT applications in libraries, and knowledge management. It prepares professionals for leadership roles in managing modern information systems and digital repositories.",
+          "eligibility": "Bachelor of Library and Information Science (B.Lib.I.Sc).",
+          "career_opportunities": [
+            "University Librarian",
+            "Information Scientist",
+            "Knowledge Manager",
+            "Research Associate",
+            "Systems Librarian",
+            "Consultant"
+          ],
+          "subjects": [
+            "Information Technology in Libraries",
+            "Research Methodology",
+            "Knowledge Management",
+            "Academic Library Systems"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Information Technology in Libraries (Advanced)",
+                    "description": "Deep dive into library automation software and networking.",
+                    "topics": ["Koha", "Soul 3.0", "Web 2.0 Tools", "Cloud Computing in Libraries", "Metadata Standards"]
+                  },
+                  {
+                    "name": "Research Methodology and Statistical Techniques",
+                    "description": "Quantitative and qualitative research methods for LIS.",
+                    "topics": ["Hypothesis Testing", "Chi-Square Test", "Bibliometrics", "Citation Analysis", "Thesis Writing"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Knowledge Management",
+                    "description": "Strategies for capturing, sharing, and using organizational knowledge.",
+                    "topics": ["KM Models", "Communities of Practice", "Content Management Systems", "Intellectual Capital"]
+                  },
+                  {
+                    "name": "Academic Library Systems and Services",
+                    "description": "Specialized management of college and university libraries.",
+                    "topics": ["Collection Development Policies", "UGC-Infonet", "Information Literacy Programs", "Accreditation (NAAC)"]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Computer Applications",
+      "courses": [
+        {
+          "course_name": "BCA",
+          "duration": "3 Years",
+          "description": "The Bachelor of Computer Applications (BCA) distance program provides a strong foundation in computer science and applications. It covers programming languages, database management, networking, and web development, preparing students for careers in the IT industry or higher studies like MCA.",
+          "eligibility": "10+2 with Mathematics/Computer Science/Information Practices or equivalent.",
+          "career_opportunities": [
+            "Software Developer",
+            "Web Designer",
+            "System Administrator",
+            "Database Administrator",
+            "IT Support Specialist",
+            "Mobile App Developer"
+          ],
+          "subjects": [
+            "Programming in C",
+            "Data Structures",
+            "Database Management System",
+            "Operating System",
+            "Computer Networks",
+            "Web Development"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Fundamentals of Computers and IT",
+                    "description": "Basic concepts of hardware, software, and operating systems.",
+                    "topics": ["Number Systems", "Input/Output Devices", "Memory Hierarchy", "Introduction to OS"]
+                  },
+                  {
+                    "name": "Programming in C",
+                    "description": "Procedural programming fundamentals using C language.",
+                    "topics": ["Data Types", "Control Structures", "Functions", "Arrays", "Pointers", "File Handling"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Data Structures using C",
+                    "description": "Organization and manipulation of data efficiently.",
+                    "topics": ["Stacks", "Queues", "Linked Lists", "Trees", "Graphs", "Sorting Algorithms"]
+                  },
+                  {
+                    "name": "Database Management System",
+                    "description": "Relational database design and SQL queries.",
+                    "topics": ["ER Model", "Normalization", "SQL Commands", "Transactions", "PL/SQL Basics"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Operating System",
+                    "description": "Core functions and architecture of modern operating systems.",
+                    "topics": ["Process Management", "CPU Scheduling", "Memory Management", "File Systems", "Linux Commands"]
+                  },
+                  {
+                    "name": "Object Oriented Programming with C++",
+                    "description": "Introduction to OOP concepts using C++.",
+                    "topics": ["Classes and Objects", "Inheritance", "Polymorphism", "Templates", "Exception Handling"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Computer Networks",
+                    "description": "Principles of data communication and network protocols.",
+                    "topics": ["OSI Model", "TCP/IP", "IP Addressing", "Routing Algorithms", "Network Security Basics"]
+                  },
+                  {
+                    "name": "Web Development",
+                    "description": "Creating interactive and responsive websites.",
+                    "topics": ["HTML5", "CSS3", "JavaScript", "Responsive Design", "Introduction to PHP/MySQL"]
+                  }
+                ]
+              },
+              {
+                "semester": 5,
+                "subjects": [
+                  {
+                    "name": "Java Programming",
+                    "description": "Platform independent application development.",
+                    "topics": ["JVM Architecture", "Applets", "JDBC", "Servlets", "JSP Introduction"]
+                  },
+                  {
+                    "name": "Software Engineering",
+                    "description": "Methodologies for developing large-scale software systems.",
+                    "topics": ["SDLC Models", "Agile Methodology", "Testing Strategies", "UML Diagrams"]
+                  }
+                ]
+              },
+              {
+                "semester": 6,
+                "subjects": [
+                  {
+                    "name": "Mobile Application Development",
+                    "description": "Introduction to building apps for Android platform.",
+                    "topics": ["Android Architecture", "Activities and Intents", "UI Widgets", "SQLite Database"]
+                  },
+                  {
+                    "name": "Major Project",
+                    "description": "Comprehensive project implementing concepts learned throughout the program.",
+                    "topics": ["Project Planning", "Frontend/Backend Development", "Testing", "Documentation"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "course_name": "MCA",
+          "duration": "2 Years",
+          "description": "The Master of Computer Applications (MCA) is a postgraduate program designed to meet the demand for qualified professionals in the IT field. The curriculum emphasizes advanced programming, cloud computing, AI, and cyber security, enabling graduates to pursue careers in software development, system architecture, and IT consulting.",
+          "eligibility": "BCA / B.Sc (CS/IT) / Bachelor's degree with Mathematics at 10+2 or Graduation level.",
+          "career_opportunities": [
+            "Software Engineer",
+            "Data Scientist",
+            "Cloud Architect",
+            "Cyber Security Analyst",
+            "Project Manager (IT)",
+            "Full Stack Developer"
+          ],
+          "subjects": [
+            "Advanced Java",
+            "Software Engineering",
+            "Cloud Computing",
+            "Machine Learning",
+            "Cyber Security"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Advanced Java Programming",
+                    "description": "Enterprise application development using Java EE.",
+                    "topics": ["JSP and Servlets", "EJB", "Hibernate Framework", "Spring Boot", "Web Services (REST/SOAP)"]
+                  },
+                  {
+                    "name": "Data Warehousing and Data Mining",
+                    "description": "Techniques for analyzing large datasets.",
+                    "topics": ["OLAP", "ETL Process", "Association Rules", "Clustering", "Classification"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Cloud Computing",
+                    "description": "Principles and practices of distributed computing on the cloud.",
+                    "topics": ["Virtualization", "IaaS, PaaS, SaaS", "AWS/Azure Fundamentals", "Cloud Security", "Microservices"]
+                  },
+                  {
+                    "name": "Machine Learning",
+                    "description": "Algorithms that allow computers to learn from data.",
+                    "topics": ["Supervised Learning (Regression, SVM)", "Unsupervised Learning", "Neural Networks Basics", "Python for ML (scikit-learn)"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Cyber Security",
+                    "description": "Protection of internet-connected systems and data.",
+                    "topics": ["Cryptography", "Network Security Protocols", "Ethical Hacking Fundamentals", "Web Application Security", "Risk Management"]
+                  },
+                  {
+                    "name": "Big Data Analytics",
+                    "description": "Processing and analyzing massive volumes of data.",
+                    "topics": ["Hadoop Ecosystem", "MapReduce", "Spark", "NoSQL Databases (MongoDB)", "Data Visualization"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Project Work",
+                    "description": "Industry-oriented project or research dissertation.",
+                    "topics": ["Requirement Analysis", "System Design", "Implementation", "Testing and Deployment", "Technical Report"]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Commerce",
+      "courses": [
+        {
+          "course_name": "B.Com",
+          "duration": "3 Years",
+          "description": "The Bachelor of Commerce (B.Com) distance program offers a comprehensive understanding of business, finance, and economics. It builds a strong foundation in accounting, taxation, and business law, preparing graduates for careers in banking, finance, corporate sectors, and professional courses like CA/CS.",
+          "eligibility": "10+2 in Commerce stream or with Mathematics/Economics.",
+          "career_opportunities": [
+            "Accountant",
+            "Tax Consultant",
+            "Financial Analyst",
+            "Auditor",
+            "Banking Officer",
+            "Investment Advisor"
+          ],
+          "subjects": [
+            "Financial Accounting",
+            "Business Law",
+            "Economics",
+            "Taxation",
+            "Auditing"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Financial Accounting",
+                    "description": "Principles and practices of recording business transactions.",
+                    "topics": ["Journal and Ledger", "Trial Balance", "Final Accounts", "Depreciation", "Bank Reconciliation"]
+                  },
+                  {
+                    "name": "Business Law",
+                    "description": "Legal framework governing business contracts and transactions.",
+                    "topics": ["Indian Contract Act", "Sale of Goods Act", "Negotiable Instruments Act", "Consumer Protection Act"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Corporate Accounting",
+                    "description": "Accounting for joint stock companies.",
+                    "topics": ["Issue of Shares and Debentures", "Redemption of Preference Shares", "Final Accounts of Companies", "Valuation of Goodwill"]
+                  },
+                  {
+                    "name": "Business Economics",
+                    "description": "Application of economic theory to business decisions.",
+                    "topics": ["Demand Forecasting", "Cost Analysis", "Market Structures", "Pricing Strategies"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Income Tax Law and Practice",
+                    "description": "Computation of taxable income and tax liability for individuals.",
+                    "topics": ["Residential Status", "Income from Salary", "House Property", "Business/Profession", "Deductions"]
+                  },
+                  {
+                    "name": "Cost Accounting",
+                    "description": "Determination and control of costs in manufacturing and services.",
+                    "topics": ["Material Costing", "Labour Costing", "Overheads", "Process Costing", "Marginal Costing"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Auditing",
+                    "description": "Principles and procedures for examining financial records.",
+                    "topics": ["Internal Control", "Vouching", "Verification of Assets", "Auditor's Report", "Audit of Companies"]
+                  },
+                  {
+                    "name": "Financial Management",
+                    "description": "Management of funds and capital structure.",
+                    "topics": ["Capital Budgeting", "Working Capital Management", "Dividend Policy", "Leverage Analysis"]
+                  }
+                ]
+              },
+              {
+                "semester": 5,
+                "subjects": [
+                  {
+                    "name": "Goods and Services Tax (GST)",
+                    "description": "Indirect tax regime in India.",
+                    "topics": ["Supply under GST", "Time and Place of Supply", "Input Tax Credit", "Registration and Returns", "GST Audit"]
+                  },
+                  {
+                    "name": "Management Accounting",
+                    "description": "Use of accounting information for managerial decision making.",
+                    "topics": ["Ratio Analysis", "Fund Flow Statement", "Cash Flow Statement", "Budgetary Control"]
+                  }
+                ]
+              },
+              {
+                "semester": 6,
+                "subjects": [
+                  {
+                    "name": "E-Commerce",
+                    "description": "Business transactions conducted electronically.",
+                    "topics": ["Business Models (B2B, B2C)", "Digital Payments", "Cyber Laws", "E-Commerce Security"]
+                  },
+                  {
+                    "name": "Project Report / Viva Voce",
+                    "description": "Practical application of commerce concepts through a mini-project.",
+                    "topics": ["Case Study Analysis", "Financial Statement Analysis", "Presentation"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "course_name": "M.Com",
+          "duration": "2 Years",
+          "description": "The Master of Commerce (M.Com) distance program provides advanced knowledge in accounting, finance, and business strategy. It is ideal for graduates aiming for senior positions in corporate finance, research, or teaching careers in commerce and management.",
+          "eligibility": "B.Com / BBA / BA (Economics) or equivalent.",
+          "career_opportunities": [
+            "Chartered Accountant (Intermediate)",
+            "Finance Manager",
+            "Investment Banker",
+            "Assistant Professor",
+            "Research Analyst",
+            "Company Secretary"
+          ],
+          "subjects": [
+            "Corporate Finance",
+            "Advanced Accounting",
+            "International Business",
+            "Financial Management"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Advanced Financial Accounting",
+                    "description": "Accounting for mergers, acquisitions, and consolidated financial statements.",
+                    "topics": ["Amalgamation", "Holding Company Accounts", "Liquidation of Companies", "IFRS Basics"]
+                  },
+                  {
+                    "name": "Strategic Financial Management",
+                    "description": "High-level financial strategies for maximizing shareholder wealth.",
+                    "topics": ["Capital Structure Theories", "Mergers and Acquisitions", "Portfolio Management", "Derivatives"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "International Business Environment",
+                    "description": "Dynamics of global trade and cross-border operations.",
+                    "topics": ["WTO", "Foreign Exchange Markets", "Modes of Entry", "International Logistics"]
+                  },
+                  {
+                    "name": "Research Methodology in Commerce",
+                    "description": "Advanced research tools for business and commerce.",
+                    "topics": ["Research Design", "Sampling", "Data Analysis using SPSS", "Report Writing", "Citation Styles"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Direct Tax Planning",
+                    "description": "Advanced tax planning strategies for individuals and corporates.",
+                    "topics": ["Tax Avoidance vs Evasion", "Corporate Tax Planning", "International Taxation", "Transfer Pricing"]
+                  },
+                  {
+                    "name": "Security Analysis and Portfolio Management",
+                    "description": "Valuation of financial assets and construction of optimal portfolios.",
+                    "topics": ["Fundamental and Technical Analysis", "CAPM", "Sharpe Ratio", "Portfolio Revision"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Dissertation",
+                    "description": "In-depth research on a contemporary issue in commerce/finance.",
+                    "topics": ["Proposal Submission", "Literature Review", "Data Analysis", "Defense"]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Management",
+      "courses": [
+        {
+          "course_name": "BBA",
+          "duration": "3 Years",
+          "description": "The Bachelor of Business Administration (BBA) distance program provides a broad understanding of business operations and management principles. It develops leadership, communication, and analytical skills essential for entry-level managerial roles and entrepreneurship.",
+          "eligibility": "10+2 in any stream.",
+          "career_opportunities": [
+            "Business Development Executive",
+            "Marketing Associate",
+            "HR Recruiter",
+            "Operations Coordinator",
+            "Entrepreneur",
+            "Customer Relationship Manager"
+          ],
+          "subjects": [
+            "Marketing Management",
+            "Human Resource Management",
+            "Business Communication",
+            "Entrepreneurship",
+            "Organizational Behavior"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Principles of Management",
+                    "description": "Foundational concepts of planning, organizing, staffing, directing, and controlling.",
+                    "topics": ["Fayol's Principles", "Management Theories", "Decision Making", "MBO"]
+                  },
+                  {
+                    "name": "Business Communication",
+                    "description": "Effective written and oral communication in a corporate environment.",
+                    "topics": ["Letter Writing", "Report Writing", "Presentation Skills", "Email Etiquette"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Organizational Behavior",
+                    "description": "Understanding individual and group dynamics in organizations.",
+                    "topics": ["Personality and Perception", "Motivation Theories", "Leadership Styles", "Group Dynamics", "Conflict Management"]
+                  },
+                  {
+                    "name": "Marketing Management",
+                    "description": "Core concepts of product, price, place, and promotion.",
+                    "topics": ["Consumer Behavior", "Segmentation", "Branding", "Digital Marketing Overview"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Human Resource Management",
+                    "description": "Processes involved in managing an organization's workforce.",
+                    "topics": ["Recruitment and Selection", "Training and Development", "Performance Appraisal", "Compensation Management"]
+                  },
+                  {
+                    "name": "Financial Management",
+                    "description": "Introduction to financial statement analysis and capital budgeting.",
+                    "topics": ["Time Value of Money", "Ratio Analysis", "Sources of Finance", "Break-even Analysis"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Entrepreneurship Development",
+                    "description": "Process of starting and managing a new business venture.",
+                    "topics": ["Business Idea Generation", "Business Plan Preparation", "MSME Registration", "Government Schemes"]
+                  },
+                  {
+                    "name": "Business Research Methods",
+                    "description": "Tools and techniques for business decision making.",
+                    "topics": ["Survey Design", "Questionnaire", "Sampling", "Data Interpretation"]
+                  }
+                ]
+              },
+              {
+                "semester": 5,
+                "subjects": [
+                  {
+                    "name": "Operations Management",
+                    "description": "Design and control of production processes.",
+                    "topics": ["Facility Layout", "Quality Management (TQM, Six Sigma)", "Supply Chain Basics", "Inventory Control"]
+                  },
+                  {
+                    "name": "Business Ethics and Corporate Governance",
+                    "description": "Ethical issues in business and responsibilities of the board.",
+                    "topics": ["CSR", "Whistleblowing", "Insider Trading", "Clause 49"]
+                  }
+                ]
+              },
+              {
+                "semester": 6,
+                "subjects": [
+                  {
+                    "name": "E-Commerce",
+                    "description": "Electronic business models and digital payments.",
+                    "topics": ["B2C and B2B Models", "E-CRM", "Payment Gateways", "E-Commerce Law"]
+                  },
+                  {
+                    "name": "Project Work",
+                    "description": "Comprehensive project on a business problem or business plan.",
+                    "topics": ["Problem Identification", "Analysis", "Recommendations", "Report Submission"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "course_name": "MBA",
+          "duration": "2 Years",
+          "description": "The Master of Business Administration (MBA) distance program is designed for working professionals and graduates aiming for leadership roles. The curriculum integrates strategic thinking, finance, marketing, and analytics, enabling students to drive organizational success in a globalized economy.",
+          "eligibility": "Bachelor's degree in any discipline. Work experience preferred.",
+          "career_opportunities": [
+            "Project Manager",
+            "Marketing Manager",
+            "Financial Controller",
+            "HR Business Partner",
+            "Business Analyst",
+            "Consultant"
+          ],
+          "subjects": [
+            "Strategic Management",
+            "Finance Management",
+            "Operations Management",
+            "Digital Marketing",
+            "Business Analytics"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Strategic Management",
+                    "description": "Formulation and implementation of long-term corporate strategy.",
+                    "topics": ["PESTLE Analysis", "Porter's Five Forces", "SWOT Analysis", "BCG Matrix", "Blue Ocean Strategy"]
+                  },
+                  {
+                    "name": "Advanced Financial Management",
+                    "description": "Corporate finance decisions and risk management.",
+                    "topics": ["Mergers and Acquisitions", "Leasing", "Dividend Theories", "Working Capital Strategies"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Operations and Supply Chain Management",
+                    "description": "Optimizing processes from procurement to delivery.",
+                    "topics": ["Lean Operations", "JIT", "Logistics Management", "ERP Systems", "Global Sourcing"]
+                  },
+                  {
+                    "name": "Digital Marketing",
+                    "description": "Leveraging online channels for brand building and lead generation.",
+                    "topics": ["SEO", "SEM", "Social Media Marketing", "Email Marketing", "Analytics (Google Analytics)", "Content Strategy"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Business Analytics",
+                    "description": "Data-driven decision making using statistical tools.",
+                    "topics": ["Descriptive Analytics", "Predictive Modeling", "Data Visualization (Tableau/Power BI)", "R/Python for Business"]
+                  },
+                  {
+                    "name": "Leadership and Change Management",
+                    "description": "Skills required to lead teams through organizational transformation.",
+                    "topics": ["Leadership Theories", "Emotional Intelligence", "Managing Resistance", "Organizational Culture"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Dissertation / Capstone Project",
+                    "description": "Application of MBA concepts to solve a real-world business problem.",
+                    "topics": ["Problem Definition", "Literature Review", "Data Analysis", "Strategic Recommendations"]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Information Technology",
+      "courses": [
+        {
+          "course_name": "B.Sc IT",
+          "duration": "3 Years",
+          "description": "The Bachelor of Science in Information Technology (B.Sc IT) distance program focuses on the practical application of computing technology to solve organizational problems. It covers networking, databases, and web technologies, preparing students for technical support and system administration roles.",
+          "eligibility": "10+2 with Mathematics/Computer Science or equivalent.",
+          "career_opportunities": [
+            "IT Support Engineer",
+            "Network Administrator",
+            "Web Developer",
+            "Database Operator",
+            "System Analyst",
+            "Cybersecurity Analyst"
+          ],
+          "subjects": [
+            "Computer Fundamentals",
+            "Programming",
+            "Networking",
+            "Database Systems",
+            "Web Technologies"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Fundamentals of Information Technology",
+                    "description": "Introduction to IT infrastructure and concepts.",
+                    "topics": ["Computer Organization", "Memory and Storage", "Input/Output Devices", "Software Types"]
+                  },
+                  {
+                    "name": "Programming Fundamentals",
+                    "description": "Logic building and basic programming using Python/C.",
+                    "topics": ["Algorithms", "Flowcharts", "Variables and Data Types", "Conditional Statements", "Loops"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Data Communication and Computer Networks",
+                    "description": "Basics of data transmission and networking models.",
+                    "topics": ["Transmission Media", "Network Topologies", "IP Addressing", "Subnetting", "Router Configuration Basics"]
+                  },
+                  {
+                    "name": "Database Management Systems",
+                    "description": "Design and querying of relational databases.",
+                    "topics": ["ER Diagrams", "Normalization", "SQL Queries (Joins, Subqueries)", "Transactions", "Indexing"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Operating Systems and Shell Scripting",
+                    "description": "Linux/Unix environment and automation.",
+                    "topics": ["Linux File System", "Process Commands", "Grep, Sed, Awk", "Shell Variables", "Basic Scripts"]
+                  },
+                  {
+                    "name": "Object Oriented Programming with Java",
+                    "description": "Java fundamentals and OOP implementation.",
+                    "topics": ["Classes and Methods", "Inheritance", "Interfaces", "Exception Handling", "Collections Framework"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Web Technologies",
+                    "description": "Development of static and dynamic websites.",
+                    "topics": ["HTML5 and CSS3", "JavaScript and DOM", "PHP Basics", "MySQL Connectivity", "Session Management"]
+                  },
+                  {
+                    "name": "Information Security Fundamentals",
+                    "description": "Principles of securing information systems.",
+                    "topics": ["CIA Triad", "Cryptography Basics", "Firewalls", "Malware Types", "Security Policies"]
+                  }
+                ]
+              },
+              {
+                "semester": 5,
+                "subjects": [
+                  {
+                    "name": "Cloud Computing Fundamentals",
+                    "description": "Introduction to cloud services and deployment models.",
+                    "topics": ["Virtualization", "AWS EC2/S3 Basics", "SaaS Examples", "Cloud Security Considerations"]
+                  },
+                  {
+                    "name": "Software Project Management",
+                    "description": "Managing IT projects using modern methodologies.",
+                    "topics": ["Project Life Cycle", "Gantt Charts", "PERT/CPM", "Agile Scrum", "Risk Management"]
+                  }
+                ]
+              },
+              {
+                "semester": 6,
+                "subjects": [
+                  {
+                    "name": "Major Project",
+                    "description": "Development of a complete IT solution or system.",
+                    "topics": ["Requirement Analysis", "Design", "Coding", "Testing", "Deployment"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "course_name": "M.Sc IT",
+          "duration": "2 Years",
+          "description": "The Master of Science in Information Technology (M.Sc IT) distance program is an advanced course focusing on emerging technologies like AI, Big Data, and Information Security. It equips graduates with the technical expertise required for senior IT roles and research in the field of computing.",
+          "eligibility": "B.Sc (IT/CS) / BCA or equivalent.",
+          "career_opportunities": [
+            "Data Scientist",
+            "Information Security Manager",
+            "Network Architect",
+            "AI/ML Engineer",
+            "IT Consultant",
+            "Project Lead"
+          ],
+          "subjects": [
+            "Advanced Networking",
+            "Artificial Intelligence",
+            "Big Data",
+            "Information Security"
+          ],
+          "syllabus": {
+            "semester_wise": [
+              {
+                "semester": 1,
+                "subjects": [
+                  {
+                    "name": "Advanced Computer Networks",
+                    "description": "In-depth study of network protocols and infrastructure design.",
+                    "topics": ["IPv6", "VLANs", "MPLS", "QoS", "Software Defined Networking (SDN)"]
+                  },
+                  {
+                    "name": "Artificial Intelligence and Expert Systems",
+                    "description": "Foundations of intelligent agents and knowledge representation.",
+                    "topics": ["Search Algorithms", "Heuristics", "Propositional Logic", "Rule-Based Systems", "Fuzzy Logic"]
+                  }
+                ]
+              },
+              {
+                "semester": 2,
+                "subjects": [
+                  {
+                    "name": "Big Data Analytics",
+                    "description": "Processing large datasets using Hadoop and Spark ecosystems.",
+                    "topics": ["HDFS", "MapReduce", "Spark RDDs", "Hive", "Pig", "Real-time Analytics"]
+                  },
+                  {
+                    "name": "Information Security and Cyber Forensics",
+                    "description": "Advanced techniques for securing and investigating cyber incidents.",
+                    "topics": ["Penetration Testing", "IDS/IPS", "Digital Evidence", "Chain of Custody", "Network Forensics Tools"]
+                  }
+                ]
+              },
+              {
+                "semester": 3,
+                "subjects": [
+                  {
+                    "name": "Machine Learning and Deep Learning",
+                    "description": "Advanced algorithms and neural network architectures.",
+                    "topics": ["Regression and Classification Models", "CNN", "RNN", "TensorFlow/Keras", "Model Evaluation"]
+                  },
+                  {
+                    "name": "Cloud Architecture and Services",
+                    "description": "Designing scalable and secure cloud solutions.",
+                    "topics": ["AWS/Azure Architecture", "Microservices", "Docker", "Kubernetes", "Serverless Computing"]
+                  }
+                ]
+              },
+              {
+                "semester": 4,
+                "subjects": [
+                  {
+                    "name": "Research Project",
+                    "description": "Original research contribution in a specialized area of Information Technology.",
+                    "topics": ["Literature Survey", "Proposed Methodology", "Implementation", "Results and Discussion", "Paper Writing"]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

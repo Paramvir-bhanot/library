@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BOOK_CATEGORY_OPTIONS, isValidBookCategory } from '@/src/lib/bookCategories';
 export default function BooksPage() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,11 +33,7 @@ export default function BooksPage() {
   });
 
   // Fetch books on mount
-  useEffect(() => {
-    fetchBooks();
-  }, []);
-
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/admin/books');
@@ -50,7 +47,11 @@ export default function BooksPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchBooks();
+  }, [fetchBooks]);
 
   const showSuccess = (message) => {
     setSuccessMessage(message);
@@ -82,6 +83,18 @@ export default function BooksPage() {
         }));
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveCoverImage = () => {
+    setFormData(prev => ({
+      ...prev,
+      coverImage: null,
+      coverImagePreview: null,
+    }));
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -122,6 +135,11 @@ export default function BooksPage() {
 
     if (!formData.title || !formData.author) {
       showError('Title and Author are required');
+      return;
+    }
+
+    if (formData.category && !isValidBookCategory(formData.category)) {
+      showError('Please choose a valid category from knowlage.json');
       return;
     }
 
@@ -217,6 +235,11 @@ export default function BooksPage() {
       return;
     }
 
+    if (formData.category && !isValidBookCategory(formData.category)) {
+      showError('Please choose a valid category from knowlage.json');
+      return;
+    }
+
     try {
       const data = new FormData();
       data.append('title', formData.title);
@@ -233,7 +256,7 @@ export default function BooksPage() {
       }
 
       const response = await fetch(`/api/admin/books/${editingBook._id}`, {
-        method: 'PATCH',
+        method: 'PUT',
         body: data,
       });
 
@@ -319,6 +342,18 @@ export default function BooksPage() {
     setEditingBook(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     if (pdfInputRef.current) pdfInputRef.current.value = '';
+  };
+
+  const handleRemovePdf = () => {
+    setFormData(prev => ({
+      ...prev,
+      pdfFile: null,
+      pdfFileName: '',
+    }));
+
+    if (pdfInputRef.current) {
+      pdfInputRef.current.value = '';
+    }
   };
 
   return (
@@ -472,9 +507,12 @@ export default function BooksPage() {
               >
                 <BookForm
                   formData={formData}
+                  categoryOptions={BOOK_CATEGORY_OPTIONS}
                   onInputChange={handleInputChange}
                   onCoverImageChange={handleCoverImageChange}
                   onPdfChange={handlePdfChange}
+                  onRemoveCoverImage={handleRemoveCoverImage}
+                  onRemovePdf={handleRemovePdf}
                   onSubmit={editingBook ? handleUpdateBook : handleAddBook}
                   isEditing={!!editingBook}
                   fileInputRef={fileInputRef}
@@ -635,9 +673,12 @@ function BookCard({ book, index, onEdit, onDelete }) {
 // Book Form Component
 function BookForm({
   formData,
+  categoryOptions,
   onInputChange,
   onCoverImageChange,
   onPdfChange,
+  onRemoveCoverImage,
+  onRemovePdf,
   onSubmit,
   isEditing,
   fileInputRef,
@@ -703,14 +744,26 @@ function BookForm({
             </FormField>
 
             <FormField label="Category">
-              <input
-                type="text"
+              <select
                 name="category"
                 value={formData.category}
                 onChange={onInputChange}
-                placeholder="e.g., Fiction, Science, History"
-                className="w-full bg-[#0a0a0a] border border-[#333333] rounded-lg px-4 py-3 text-white placeholder-[#666666] focus:outline-none focus:border-[#D4AF37] transition-colors"
-              />
+                className="w-full bg-[#0a0a0a] border border-[#333333] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
+              >
+                <option value="">Select category from knowlage.json</option>
+                {categoryOptions.map((group) => (
+                  <optgroup key={group.department} label={group.department}>
+                    {group.categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+                {formData.category && !isValidBookCategory(formData.category) && (
+                  <option value={formData.category}>{formData.category} (Legacy)</option>
+                )}
+              </select>
             </FormField>
 
             <FormField label="Language">
@@ -828,12 +881,7 @@ function BookForm({
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setFormData(prev => ({
-                          ...prev,
-                          coverImage: null,
-                          coverImagePreview: null,
-                        }));
-                        if (fileInputRef.current) fileInputRef.current.value = '';
+                        onRemoveCoverImage();
                       }}
                       className="text-sm text-[#E53935] hover:text-[#D32F2F]"
                     >
@@ -880,12 +928,7 @@ function BookForm({
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setFormData(prev => ({
-                          ...prev,
-                          pdfFile: null,
-                          pdfFileName: '',
-                        }));
-                        if (pdfInputRef.current) pdfInputRef.current.value = '';
+                        onRemovePdf();
                       }}
                       className="text-sm text-[#E53935] hover:text-[#D32F2F]"
                     >
