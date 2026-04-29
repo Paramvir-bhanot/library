@@ -1,62 +1,75 @@
-import Admin from '@/models/admin.js';
-import connectDB from '@/lib/DBconnection';
-import jwt from 'jsonwebtoken';
+ import connectDB from "@/lib/DBconnection";
+import user from "@/models/user";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    await connectDB();
     const { name, email, password } = await req.json();
 
-    if (!process.env.JWT_SECRET) {
-      return new Response(JSON.stringify({ message: 'Server misconfiguration: JWT_SECRET is not set' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    if (!name || !email || !password) {
+      return NextResponse.json(
+        { message: "Please provide all fields" },
+        { status: 400 }
+      );
     }
 
-    const adminExists = await Admin.findOne({ email });
-    if (adminExists) {
-      return new Response(JSON.stringify({ message: 'Admin already exists' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    await connectDB();
+
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "User already exists" },
+        { status: 400 }
+      );
     }
 
-    const admin = await Admin.create({
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create an user record with basic info
+    const applicant = new user({
       name,
       email,
-      password,
-      role: 'admin',
+      phoneNumber: "", // Can be updated later in profile
+      gender: "Prefer not to say", // Default value
+      dob: new Date(), // Default value, can be updated
+      experience: "Fresher", // Default value
+      previousRoles: [],
+      skills: [],
+      englishProficiency: "Basic",
+      computerKnowledge: {
+        msOffice: false,
+        basicComputer: false,
+        photoshop: false,
+        canva: false,
+        tally: false,
+        other: "",
+      },
     });
 
-    if (admin) {
-      const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
-      });
+    await applicant.save();
 
-      return new Response(
-        JSON.stringify({
-          _id: admin._id,
-          name: admin.name,
-          email: admin.email,
-          role: admin.role,
-          token,
-        }),
-        {
-          status: 201,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-    } else {
-      return new Response(JSON.stringify({ message: 'Invalid admin data' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
+    // Create User with userId reference
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      provider: "credentials",
+      userId: user._id,
+    });
+
+    await newUser.save();
+
+    return NextResponse.json(
+      { message: "User registered successfully" },
+      { status: 201 }
+    );
   } catch (error) {
-    return new Response(JSON.stringify({ message: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error("Registration Error:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

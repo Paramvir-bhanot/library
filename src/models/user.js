@@ -21,9 +21,24 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Please provide a password'],
+      required: function () {
+        return this.provider === 'credentials';
+      },
       minlength: [6, 'Password must be at least 6 characters'],
-      select: false, // Password won't be returned by default in queries
+      select: false,
+    },
+    image: {
+      type: String,
+    },
+    provider: {
+      type: String,
+      enum: ['google', 'facebook', 'credentials'],
+      default: 'credentials',
+    },
+    applicantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Applicant',
+      default: null,
     },
     degree: {
       type: String,
@@ -57,8 +72,7 @@ const userSchema = new mongoose.Schema(
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-  // Only hash if password is new or modified
-  if (!this.isModified('password')) {
+  if (!this.password || !this.isModified('password')) {
     return next();
   }
 
