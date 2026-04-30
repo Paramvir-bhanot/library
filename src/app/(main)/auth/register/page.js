@@ -2,7 +2,31 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { authOptions } from '@/lib/auth';
+
+// Minimal styles placeholder to avoid runtime errors during prerender.
+const styles = {
+  container: '',
+  bgAccent1: '',
+  bgAccent2: '',
+  formWrapper: '',
+  header: '',
+  title: '',
+  subtitle: '',
+  successMessage: '',
+  successIcon: '',
+  redirectText: '',
+  form: '',
+  formGroup: '',
+  label: '',
+  input: '',
+  errorMessage: '',
+  errorIcon: '',
+  submitBtn: '',
+  loginLink: '',
+  link: '',
+  footer: '',
+  footerLink: '',
+};
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

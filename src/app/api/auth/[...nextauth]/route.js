@@ -1,11 +1,25 @@
-import NextAuth from "next-auth";
-import { authOptions } from "@/lib/auth";
+// Defer all NextAuth and auth option imports to request-time so the bundler
+// doesn't evaluate server-only dependencies during the build phase.
+export async function GET(...args) {
+  if (!process.env.NEXTAUTH_SECRET) {
+    console.error("❌ NEXTAUTH_SECRET is not set in environment variables");
+    throw new Error("NEXTAUTH_SECRET is required for NextAuth to work");
+  }
 
-// Validate required environment variables
-if (!process.env.NEXTAUTH_SECRET) {
-  console.error("❌ NEXTAUTH_SECRET is not set in environment variables");
-  throw new Error("NEXTAUTH_SECRET is required for NextAuth to work");
+  const NextAuth = (await import("next-auth")).default;
+  const { authOptions } = await import("../../../../lib/auth");
+  const handler = NextAuth(authOptions);
+  return handler(...args);
 }
-const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+export async function POST(...args) {
+  if (!process.env.NEXTAUTH_SECRET) {
+    console.error("❌ NEXTAUTH_SECRET is not set in environment variables");
+    throw new Error("NEXTAUTH_SECRET is required for NextAuth to work");
+  }
+
+  const NextAuth = (await import("next-auth")).default;
+  const { authOptions } = await import("../../../../lib/auth");
+  const handler = NextAuth(authOptions);
+  return handler(...args);
+}
