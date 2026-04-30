@@ -7,7 +7,7 @@ export async function GET(...args) {
   }
 
   const NextAuth = (await import("next-auth")).default;
-  const { authOptions } = await import("../../../../../src/lib/auth");
+  const { authOptions } = await import("../../../../lib/auth");
   const handler = NextAuth(authOptions);
   return handler(...args);
 }
@@ -19,7 +19,7 @@ export async function POST(...args) {
   }
 
   const NextAuth = (await import("next-auth")).default;
-  const { authOptions } = await import("../../../../../src/lib/auth");
+  const { authOptions } = await import("../../../../lib/auth");
   const handler = NextAuth(authOptions);
   return handler(...args);
 }
