@@ -2,12 +2,47 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+
+// Provided theme – normally imported from a config file
+const theme = {
+  colors: {
+    primary: '#D4AF37',
+    secondary: '#F5F5F5',
+    background: '#000000',
+    surface: '#111111',
+    accent: '#C9A227',
+  },
+  text: {
+    primary: '#FFFFFF',
+    secondary: '#BFBFBF',
+    highlight: '#D4AF37',
+  },
+  buttons: {
+    primaryBg: '#D4AF37',
+    primaryText: '#000000',
+    secondaryBg: '#111111',
+    secondaryText: '#D4AF37',
+    hoverBg: '#C9A227',
+  },
+  borders: {
+    light: '#333333',
+    highlight: '#D4AF37',
+  },
+  status: {
+    success: '#4CAF50',
+    error: '#E53935',
+    warning: '#FFB300',
+    info: '#2196F3',
+  },
+};
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,12 +55,14 @@ export default function LoginPage() {
       const result = await signIn('credentials', {
         email,
         password,
-        redirect: true,
+        redirect: false,           // allow client-side error handling
         callbackUrl: '/dashboard',
       });
 
-      if (!result?.ok) {
+      if (result?.error) {
         setError('Invalid email or password');
+      } else if (result?.ok) {
+        router.push('/dashboard'); // manual redirect on success
       }
     } catch (err) {
       setError('Login failed. Please try again.');
@@ -42,14 +79,13 @@ export default function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-wrapper">
-        {/* Logo/Brand Section */}
+        {/* Brand */}
         <div className="brand-section">
           <div className="brand-icon">✦</div>
           <h1 className="brand-name">Premium</h1>
           <p className="brand-subtitle">Welcome Back</p>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="error-message">
             <span className="error-icon">!</span>
@@ -57,7 +93,6 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Email/Password Form */}
         <form onSubmit={handleEmailLogin} className="login-form">
           <div className="form-group">
             <label htmlFor="email" className="form-label">
@@ -93,7 +128,11 @@ export default function LoginPage() {
 
           <div className="form-footer">
             <label className="remember-me">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+              />
               <span>Remember me</span>
             </label>
             <Link href="/forgot-password" className="forgot-password">
@@ -117,12 +156,10 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Divider */}
         <div className="divider">
           <span>Or continue with</span>
         </div>
 
-        {/* Social Login Buttons */}
         <div className="social-login">
           <button
             type="button"
@@ -154,7 +191,6 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Sign Up Link */}
         <div className="signup-link">
           Don't have an account?{' '}
           <Link href="/signup" className="signup-anchor">
@@ -163,32 +199,23 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Decorative Elements */}
       <div className="gradient-blob blob-1"></div>
       <div className="gradient-blob blob-2"></div>
 
       <style jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        :root {
-          --primary: #D4AF37;
-          --secondary: #F5F5F5;
-          --background: #000000;
-          --surface: #111111;
-          --accent: #C9A227;
-          --text-primary: #FFFFFF;
-          --text-secondary: #BFBFBF;
-          --error: #E53935;
-          --success: #4CAF50;
-          --border-light: #333333;
-          --border-highlight: #D4AF37;
-        }
-
         .login-container {
+          /* Bind theme tokens to container (scoped, inherited by children) */
+          --primary: ${theme.colors.primary};
+          --secondary: ${theme.colors.secondary};
+          --background: ${theme.colors.background};
+          --surface: ${theme.colors.surface};
+          --accent: ${theme.colors.accent};
+          --text-primary: ${theme.text.primary};
+          --text-secondary: ${theme.text.secondary};
+          --border-light: ${theme.borders.light};
+          --border-highlight: ${theme.borders.highlight};
+          --error: ${theme.status.error};
+
           width: 100%;
           min-height: 100vh;
           background: linear-gradient(135deg, var(--background) 0%, #0a0a0a 100%);
@@ -198,7 +225,7 @@ export default function LoginPage() {
           padding: 20px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
           position: relative;
-          overflow: hidden;
+          overflow: hidden; /* prevent blob overflow */
         }
 
         .login-wrapper {
@@ -215,30 +242,21 @@ export default function LoginPage() {
         }
 
         @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* Brand Section */
         .brand-section {
           text-align: center;
           margin-bottom: 40px;
           animation: fadeIn 0.8s ease-out 0.1s both;
         }
-
         .brand-icon {
           font-size: 32px;
           margin-bottom: 16px;
           color: var(--primary);
           letter-spacing: 8px;
         }
-
         .brand-name {
           font-size: 28px;
           font-weight: 600;
@@ -246,7 +264,6 @@ export default function LoginPage() {
           margin-bottom: 4px;
           letter-spacing: -0.5px;
         }
-
         .brand-subtitle {
           font-size: 14px;
           color: var(--text-secondary);
@@ -254,17 +271,11 @@ export default function LoginPage() {
           letter-spacing: 1px;
           text-transform: uppercase;
         }
-
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
+          from { opacity: 0; }
+          to   { opacity: 1; }
         }
 
-        /* Error Message */
         .error-message {
           background: rgba(229, 57, 53, 0.1);
           border: 1px solid rgba(229, 57, 53, 0.3);
@@ -278,27 +289,22 @@ export default function LoginPage() {
           gap: 10px;
           animation: shake 0.3s ease-out;
         }
-
         .error-icon {
           font-weight: bold;
           font-size: 16px;
         }
-
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
+          25%  { transform: translateX(-5px); }
+          75%  { transform: translateX(5px); }
         }
 
-        /* Form */
         .login-form {
           margin-bottom: 30px;
         }
-
         .form-group {
           margin-bottom: 24px;
         }
-
         .form-label {
           display: block;
           font-size: 13px;
@@ -308,7 +314,6 @@ export default function LoginPage() {
           letter-spacing: 0.5px;
           text-transform: uppercase;
         }
-
         .form-input {
           width: 100%;
           padding: 12px 16px;
@@ -320,28 +325,23 @@ export default function LoginPage() {
           transition: all 0.3s ease;
           outline: none;
         }
-
         .form-input:hover {
           border-color: rgba(212, 175, 55, 0.3);
           background: rgba(255, 255, 255, 0.05);
         }
-
         .form-input:focus {
           border-color: var(--primary);
           background: rgba(212, 175, 55, 0.05);
           box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
-
         .form-input::placeholder {
           color: var(--text-secondary);
         }
-
         .form-input:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
 
-        /* Form Footer */
         .form-footer {
           display: flex;
           justify-content: space-between;
@@ -349,7 +349,6 @@ export default function LoginPage() {
           margin-bottom: 24px;
           font-size: 13px;
         }
-
         .remember-me {
           display: flex;
           align-items: center;
@@ -358,35 +357,26 @@ export default function LoginPage() {
           color: var(--text-secondary);
           transition: color 0.3s ease;
         }
-
-        .remember-me:hover {
-          color: var(--text-primary);
-        }
-
+        .remember-me:hover { color: var(--text-primary); }
         .remember-me input[type='checkbox'] {
           cursor: pointer;
           width: 14px;
           height: 14px;
           accent-color: var(--primary);
         }
-
         .forgot-password {
           color: var(--primary);
           text-decoration: none;
           transition: color 0.3s ease;
           font-weight: 500;
         }
+        .forgot-password:hover { color: var(--accent); }
 
-        .forgot-password:hover {
-          color: var(--accent);
-        }
-
-        /* Login Button */
         .login-button {
           width: 100%;
           padding: 13px 24px;
           background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-          color: #000000;
+          color: ${theme.buttons.primaryText};
           border: none;
           border-radius: 8px;
           font-size: 14px;
@@ -400,24 +390,13 @@ export default function LoginPage() {
           gap: 8px;
           text-transform: uppercase;
         }
-
         .login-button:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
         }
-
-        .login-button:active:not(:disabled) {
-          transform: translateY(0);
-        }
-
-        .login-button:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-
-        .login-button.loading {
-          gap: 10px;
-        }
+        .login-button:active:not(:disabled) { transform: translateY(0); }
+        .login-button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .login-button.loading { gap: 10px; }
 
         .spinner {
           display: inline-block;
@@ -428,14 +407,8 @@ export default function LoginPage() {
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        /* Divider */
         .divider {
           display: flex;
           align-items: center;
@@ -443,7 +416,6 @@ export default function LoginPage() {
           color: var(--text-secondary);
           font-size: 13px;
         }
-
         .divider::before,
         .divider::after {
           content: '';
@@ -451,18 +423,13 @@ export default function LoginPage() {
           height: 1px;
           background: var(--border-light);
         }
+        .divider span { padding: 0 12px; }
 
-        .divider span {
-          padding: 0 12px;
-        }
-
-        /* Social Login */
         .social-login {
           display: flex;
           gap: 12px;
           margin-bottom: 24px;
         }
-
         .social-button {
           flex: 1;
           padding: 11px 0;
@@ -481,49 +448,28 @@ export default function LoginPage() {
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
-
         .social-button:hover:not(:disabled) {
           border-color: rgba(212, 175, 55, 0.5);
           background: rgba(212, 175, 55, 0.08);
         }
+        .social-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .social-button svg { width: 18px; height: 18px; }
+        .social-button.google:hover:not(:disabled) { color: #4285F4; }
+        .social-button.facebook:hover:not(:disabled) { color: #1877F2; }
 
-        .social-button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .social-button svg {
-          width: 18px;
-          height: 18px;
-        }
-
-        .social-button.google:hover:not(:disabled) {
-          color: #4285F4;
-        }
-
-        .social-button.facebook:hover:not(:disabled) {
-          color: #1877F2;
-        }
-
-        /* Sign Up Link */
         .signup-link {
           text-align: center;
           font-size: 13px;
           color: var(--text-secondary);
         }
-
         .signup-anchor {
           color: var(--primary);
           text-decoration: none;
           font-weight: 600;
           transition: color 0.3s ease;
         }
+        .signup-anchor:hover { color: var(--accent); }
 
-        .signup-anchor:hover {
-          color: var(--accent);
-        }
-
-        /* Decorative Blobs */
         .gradient-blob {
           position: absolute;
           opacity: 0.05;
@@ -531,7 +477,6 @@ export default function LoginPage() {
           border-radius: 50%;
           pointer-events: none;
         }
-
         .blob-1 {
           width: 400px;
           height: 400px;
@@ -540,7 +485,6 @@ export default function LoginPage() {
           left: -100px;
           animation: float 6s ease-in-out infinite;
         }
-
         .blob-2 {
           width: 300px;
           height: 300px;
@@ -549,40 +493,17 @@ export default function LoginPage() {
           right: -50px;
           animation: float 8s ease-in-out infinite reverse;
         }
-
         @keyframes float {
-          0%, 100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(30px, -30px);
-          }
+          0%, 100% { transform: translate(0, 0); }
+          50%      { transform: translate(30px, -30px); }
         }
 
-        /* Responsive */
         @media (max-width: 480px) {
-          .login-wrapper {
-            padding: 32px 24px;
-          }
-
-          .brand-name {
-            font-size: 24px;
-          }
-
-          .form-footer {
-            flex-direction: column;
-            gap: 12px;
-            align-items: flex-start;
-          }
-
-          .social-login {
-            flex-direction: column;
-          }
-
-          .social-button {
-            flex-direction: row;
-            justify-content: center;
-          }
+          .login-wrapper { padding: 32px 24px; }
+          .brand-name    { font-size: 24px; }
+          .form-footer   { flex-direction: column; gap: 12px; align-items: flex-start; }
+          .social-login  { flex-direction: column; }
+          .social-button { flex-direction: row; justify-content: center; }
         }
       `}</style>
     </div>
