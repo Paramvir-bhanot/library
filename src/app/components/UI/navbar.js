@@ -60,6 +60,11 @@ const Navbar = () => {
     setImageError(false);
   }, [session?.user?.image]);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   const handleLogout = async () => {
     await signOut({ redirect: false });
     setIsUserMenuOpen(false);
@@ -223,11 +228,11 @@ const Navbar = () => {
 
       {/* Mobile menu (expands with animation) */}
       <div
-        className={`md:hidden fixed top-16 sm:top-20 left-0 right-0 bg-gray-950 border-t border-gray-800 transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-5rem)] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
-        } overflow-y-auto`}
+        className={`md:hidden overflow-hidden border-t border-gray-800 transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
       >
-        <div className="px-3 sm:px-4 pt-2 pb-6 space-y-2">
+        <div className="px-3 sm:px-4 pt-3 pb-4 space-y-2 bg-gray-950">
           {navLinks.map((link) => (
             <div key={link.name}>
               <Link
@@ -284,7 +289,7 @@ const Navbar = () => {
                       {session.user.name}
                     </p>
                     <p className="text-xs text-gray-500 truncate">
-                      {session.user.email}
+                      {session.user.provider === "google" ? "Google" : "User"}
                     </p>
                   </div>
                 </div>
