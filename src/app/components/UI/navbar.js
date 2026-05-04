@@ -67,13 +67,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-black border-b border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+    <nav className="bg-black border-b border-gray-800 sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+        <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
           <Link
             href="/"
-            className="text-2xl font-bold tracking-wider text-yellow-500 hover:text-yellow-400 transition-colors"
+            className="text-xl sm:text-2xl font-bold tracking-wider text-yellow-500 hover:text-yellow-400 transition-colors"
           >
             LUXE
           </Link>
@@ -192,7 +192,7 @@ const Navbar = () => {
           {/* Mobile hamburger button (visible only on mobile) */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-md text-yellow-500 hover:bg-gray-900 transition-colors"
+            className="md:hidden p-2 rounded-md text-yellow-500 hover:bg-gray-900 transition-colors active:bg-gray-800 min-h-10 min-w-10 flex items-center justify-center"
             aria-label="Toggle menu"
           >
             <svg
@@ -223,17 +223,17 @@ const Navbar = () => {
 
       {/* Mobile menu (expands with animation) */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`md:hidden fixed top-16 sm:top-20 left-0 right-0 bg-gray-950 border-t border-gray-800 transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-5rem)] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
+        } overflow-y-auto`}
       >
-        <div className="px-4 pt-2 pb-6 space-y-3 bg-gray-950 border-t border-gray-800">
+        <div className="px-3 sm:px-4 pt-2 pb-6 space-y-2">
           {navLinks.map((link) => (
             <div key={link.name}>
               <Link
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className={`block py-2 text-base font-medium transition-colors ${
+                className={`block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors ${
                   isActive(link.href)
                     ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
                     : "text-gray-400 hover:text-yellow-500 pl-4"
@@ -244,13 +244,13 @@ const Navbar = () => {
 
               {/* Mobile dropdown for departments */}
               {link.name === "Courses" && (
-                <div className="ml-5 mt-1 space-y-1 rounded-lg border border-gray-800 bg-gray-950 p-2">
+                <div className="ml-3 sm:ml-5 mt-1 space-y-1 rounded-lg border border-gray-800 bg-gray-950 p-2">
                   {departmentLinks.map((dept) => (
                     <Link
                       key={dept.name}
                       href={dept.href}
                       onClick={() => setIsOpen(false)}
-                      className="block rounded-md px-2 py-1.5 text-sm text-gray-400 transition-colors hover:bg-gray-900 hover:text-yellow-500"
+                      className="block rounded-md px-2 py-1.5 text-xs sm:text-sm text-gray-400 transition-colors hover:bg-gray-900 hover:text-yellow-500"
                     >
                       {dept.name}
                     </Link>
@@ -265,7 +265,7 @@ const Navbar = () => {
             {isLoggedIn ? (
               <div>
                 <div className="flex items-center space-x-3 mb-3">
-                  <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden bg-gray-900 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden bg-gray-900 flex items-center justify-center flex-shrink-0">
                     {session.user.image && !imageError ? (
                       <img
                         src={session.user.image}
@@ -279,30 +279,30 @@ const Navbar = () => {
                       </span>
                     )}
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-300">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-gray-300 truncate">
                       {session.user.name}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 truncate">
                       {session.user.email}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="w-full px-5 py-2.5 border border-yellow-500 text-yellow-500 font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
+                  className="w-full px-4 sm:px-5 py-2 sm:py-2.5 border border-yellow-500 text-yellow-500 text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col space-y-3">
+              <div className="flex flex-col gap-2 sm:gap-3">
                 <button
                   onClick={() => {
                     router.push("/auth/userlogin");
                     setIsOpen(false);
                   }}
-                  className="w-full px-5 py-2.5 border border-yellow-500 text-yellow-500 font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
+                  className="w-full px-4 sm:px-5 py-2 sm:py-2.5 border border-yellow-500 text-yellow-500 text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
                 >
                   Login
                 </button>
@@ -311,7 +311,7 @@ const Navbar = () => {
                     router.push("/auth/register");
                     setIsOpen(false);
                   }}
-                  className="w-full px-5 py-2.5 bg-yellow-500 text-black font-semibold rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20"
+                  className="w-full px-4 sm:px-5 py-2 sm:py-2.5 bg-yellow-500 text-black text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20"
                 >
                   Get Started
                 </button>
