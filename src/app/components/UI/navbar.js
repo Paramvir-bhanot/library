@@ -21,6 +21,7 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileDepartmentsOpen, setIsMobileDepartmentsOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
   const userMenuRef = useRef(null);
 
@@ -63,6 +64,7 @@ const Navbar = () => {
   // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
+    setIsMobileDepartmentsOpen(false);
   }, [pathname]);
 
   const handleLogout = async () => {
@@ -229,38 +231,71 @@ const Navbar = () => {
       {/* Mobile menu (expands with animation) */}
       <div
         className={`md:hidden overflow-hidden border-t border-gray-800 transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-3 sm:px-4 pt-3 pb-4 space-y-2 bg-gray-950">
+        <div className="px-3 sm:px-4 pt-3 pb-4 space-y-2 bg-gray-950 overflow-y-auto max-h-[80vh]">
           {navLinks.map((link) => (
             <div key={link.name}>
-              <Link
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className={`block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors ${
-                  isActive(link.href)
-                    ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
-                    : "text-gray-400 hover:text-yellow-500 pl-4"
-                }`}
-              >
-                {link.name}
-              </Link>
-
-              {/* Mobile dropdown for departments */}
-              {link.name === "Courses" && (
-                <div className="ml-3 sm:ml-5 mt-1 space-y-1 rounded-lg border border-gray-800 bg-gray-950 p-2">
-                  {departmentLinks.map((dept) => (
-                    <Link
-                      key={dept.name}
-                      href={dept.href}
-                      onClick={() => setIsOpen(false)}
-                      className="block rounded-md px-2 py-1.5 text-xs sm:text-sm text-gray-400 transition-colors hover:bg-gray-900 hover:text-yellow-500"
+              {link.name === "Courses" ? (
+                <>
+                  <button
+                    onClick={() => setIsMobileDepartmentsOpen(!isMobileDepartmentsOpen)}
+                    className={`w-full text-left block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors flex items-center justify-between ${
+                      isActive(link.href)
+                        ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
+                        : "text-gray-400 hover:text-yellow-500 pl-4"
+                    }`}
+                  >
+                    <span>{link.name}</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${
+                        isMobileDepartmentsOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      {dept.name}
-                    </Link>
-                  ))}
-                </div>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Mobile departments dropdown */}
+                  {isMobileDepartmentsOpen && (
+                    <div className="ml-3 sm:ml-5 mt-2 space-y-1 rounded-lg border border-gray-800 bg-gray-900 p-2">
+                      {departmentLinks.map((dept) => (
+                        <Link
+                          key={dept.name}
+                          href={dept.href}
+                          onClick={() => {
+                            setIsOpen(false);
+                            setIsMobileDepartmentsOpen(false);
+                          }}
+                          className="block rounded-md px-2 py-1.5 text-xs sm:text-sm text-gray-400 transition-colors hover:bg-gray-800 hover:text-yellow-500"
+                        >
+                          {dept.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors ${
+                    isActive(link.href)
+                      ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
+                      : "text-gray-400 hover:text-yellow-500 pl-4"
+                  }`}
+                >
+                  {link.name}
+                </Link>
               )}
             </div>
           ))}
