@@ -320,56 +320,8 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen bg-[#000000] text-[#F5F5F5] overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-white">
-      {/* ==================== NAVBAR ==================== */}
-      <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 bg-[#000000]/80 backdrop-blur-xl border-b border-[#333333]/50"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="flex items-center gap-2 group">
-            <Icons.GraduationCap className="w-7 h-7 md:w-8 md:h-8 text-[#D4AF37] group-hover:scale-110 transition-transform duration-300" />
-            <span className="text-lg md:text-xl font-bold text-white tracking-tight">
-              LPU<span className="text-[#D4AF37]"> Distance</span>
-            </span>
-          </Link>
-          <div className="hidden md:flex items-center gap-8 text-sm uppercase tracking-wider text-[#BFBFBF]">
-            {["Home", "Programs", "About", "Admissions", "Contact"].map((item) => (
-              <Link
-                key={item}
-                href={item === "About" ? "/about" : `/${item.toLowerCase()}`}
-                className={`hover:text-[#D4AF37] transition-colors duration-300 relative py-1 ${
-                  item === "About" ? "text-[#D4AF37]" : ""
-                }`}
-              >
-                {item}
-                {item === "About" && (
-                  <motion.span
-                    layoutId="nav-underline"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#D4AF37] rounded-full"
-                  />
-                )}
-              </Link>
-            ))}
-          </div>
-          <Link
-            href="/apply"
-            className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#D4AF37] text-black font-semibold text-sm hover:bg-[#C9A227] transition-all duration-300 hover:shadow-lg hover:shadow-[#D4AF37]/25 active:scale-95"
-          >
-            Apply Now
-            <Icons.ArrowRight className="w-4 h-4" />
-          </Link>
-          {/* Mobile menu button */}
-          <button className="md:hidden p-2 text-[#BFBFBF] hover:text-[#D4AF37] transition-colors">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-          </button>
-        </div>
-      </motion.nav>
+  
+    
 
       {/* ==================== HERO SECTION ==================== */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden">

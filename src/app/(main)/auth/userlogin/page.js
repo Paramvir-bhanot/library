@@ -1,511 +1,314 @@
 'use client';
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-
-// Provided theme – normally imported from a config file
-const theme = {
-  colors: {
-    primary: '#D4AF37',
-    secondary: '#F5F5F5',
-    background: '#000000',
-    surface: '#111111',
-    accent: '#C9A227',
-  },
-  text: {
-    primary: '#FFFFFF',
-    secondary: '#BFBFBF',
-    highlight: '#D4AF37',
-  },
-  buttons: {
-    primaryBg: '#D4AF37',
-    primaryText: '#000000',
-    secondaryBg: '#111111',
-    secondaryText: '#D4AF37',
-    hoverBg: '#C9A227',
-  },
-  borders: {
-    light: '#333333',
-    highlight: '#D4AF37',
-  },
-  status: {
-    success: '#4CAF50',
-    error: '#E53935',
-    warning: '#FFB300',
-    info: '#2196F3',
-  },
-};
 
 export default function LoginPage() {
+  const { data: session } = useSession();
   const router = useRouter();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (session) {
+      localStorage.setItem('user', JSON.stringify(session.user));
+      router.push('/');
+    }
+  }, [session, router]);
+
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background gradient ornament */}
+      <div className="absolute inset-0 bg-gradient-radial from-[#D4AF37]/5 to-transparent pointer-events-none" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-[#111111] border border-[#333333] rounded-2xl shadow-2xl backdrop-blur-sm p-8 relative z-10">
+          {/* Logo / Brand */}
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-center mb-8"
+          >
+            <h1 className="text-4xl font-bold text-[#D4AF37] tracking-wide">
+              AURA
+            </h1>
+            <p className="text-[#BFBFBF] mt-2 text-sm">
+              Sign in to continue your journey
+            </p>
+          </motion.div>
+
+          {/* Login Form */}
+          <LoginForm />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [remember, setRemember] = useState(false);
-  const [error, setError] = useState('');
+  const [isMagicLink, setIsMagicLink] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleEmailLogin = async (e) => {
+  // Store user data after any successful login (handled in parent useEffect as well)
+  const handleLoginSuccess = (user) => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,           // allow client-side error handling
-        callbackUrl: '/dashboard',
-      });
+      if (isMagicLink) {
+        // Email (magic link) sign in
+        const result = await signIn('email', {
+          email,
+          callbackUrl: '/',
+          redirect: false,
+        });
+        if (result?.error) {
+          setError('Failed to send magic link');
+        } else {
+          setError('');
+          // Provide feedback to check email (NextAuth redirect doesn't happen with redirect: false, so we show message)
+          setError({ type: 'success', message: 'Check your email for a magic link' });
+        }
+      } else {
+        // Credentials sign in (email + password)
+        const result = await signIn('credentials', {
+          email,
+          password,
+          callbackUrl: '/',
+          redirect: false,
+        });
 
-      if (result?.error) {
-        setError('Invalid email or password');
-      } else if (result?.ok) {
-        router.push('/dashboard'); // manual redirect on success
+        if (result?.error) {
+          setError(result.error);
+        } else if (result?.ok) {
+          // Success – session update will trigger redirection and localStorage storage
+          setError('');
+        }
       }
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    setLoading(true);
-    signIn(provider, { callbackUrl: '/dashboard' });
+  const handleOAuthSignIn = (provider) => {
+    signIn(provider, { callbackUrl: '/' });
+  };
+
+  // Input field animation variants
+  const inputVariants = {
+    rest: { borderColor: '#333333' },
+    focus: { borderColor: '#D4AF37', boxShadow: '0 0 0 2px rgba(212,175,55,0.2)' },
   };
 
   return (
-    <div className="login-container">
-      <div className="login-wrapper">
-        {/* Brand */}
-        <div className="brand-section">
-          <div className="brand-icon">✦</div>
-          <h1 className="brand-name">Premium</h1>
-          <p className="brand-subtitle">Welcome Back</p>
-        </div>
+    <div>
+      {/* OAuth Buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="space-y-3 mb-6"
+      >
+        <button
+          onClick={() => handleOAuthSignIn('google')}
+          className="w-full flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 text-white border border-[#333333] rounded-lg py-3 px-4 transition-all duration-300 font-medium"
+        >
+          <GoogleIcon />
+          Continue with Google
+        </button>
 
-        {error && (
-          <div className="error-message">
-            <span className="error-icon">!</span>
-            {error}
-          </div>
-        )}
+        <button
+          onClick={() => handleOAuthSignIn('facebook')}
+          className="w-full flex items-center justify-center gap-3 bg-[#1877F2]/20 hover:bg-[#1877F2]/30 text-white border border-[#333333] rounded-lg py-3 px-4 transition-all duration-300 font-medium"
+        >
+          <FacebookIcon />
+          Continue with Facebook
+        </button>
 
-        <form onSubmit={handleEmailLogin} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="form-input"
-              required
-              disabled={loading}
-            />
-          </div>
+        <button
+          onClick={() => handleOAuthSignIn('github')}
+          className="w-full flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 text-white border border-[#333333] rounded-lg py-3 px-4 transition-all duration-300 font-medium"
+        >
+          <GithubIcon />
+          Continue with GitHub
+        </button>
+      </motion.div>
 
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="form-input"
-              required
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-footer">
-            <label className="remember-me">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-              />
-              <span>Remember me</span>
-            </label>
-            <Link href="/forgot-password" className="forgot-password">
-              Forgot Password?
-            </Link>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`login-button ${loading ? 'loading' : ''}`}
-          >
-            {loading ? (
-              <>
-                <span className="spinner"></span>
-                Signing In...
-              </>
-            ) : (
-              'Sign In'
-            )}
-          </button>
-        </form>
-
-        <div className="divider">
-          <span>Or continue with</span>
-        </div>
-
-        <div className="social-login">
-          <button
-            type="button"
-            onClick={() => handleSocialLogin('google')}
-            disabled={loading}
-            className="social-button google"
-            aria-label="Sign in with Google"
-          >
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-            </svg>
-            Google
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleSocialLogin('facebook')}
-            disabled={loading}
-            className="social-button facebook"
-            aria-label="Sign in with Facebook"
-          >
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-            </svg>
-            Facebook
-          </button>
-        </div>
-
-        <div className="signup-link">
-          Don't have an account?{' '}
-          <Link href="/signup" className="signup-anchor">
-            Create one
-          </Link>
-        </div>
+      {/* Divider */}
+      <div className="flex items-center gap-4 my-6">
+        <div className="flex-1 h-px bg-[#333333]" />
+        <span className="text-sm text-[#BFBFBF]">or</span>
+        <div className="flex-1 h-px bg-[#333333]" />
       </div>
 
-      <div className="gradient-blob blob-1"></div>
-      <div className="gradient-blob blob-2"></div>
+      {/* Email Form */}
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="space-y-4"
+      >
+        {/* Error Message */}
+        {error && typeof error === 'string' && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="text-sm text-[#E53935] bg-[#E53935]/10 rounded-lg p-3 border border-[#E53935]/20"
+          >
+            {error}
+          </motion.div>
+        )}
+        {error?.type === 'success' && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="text-sm text-[#4CAF50] bg-[#4CAF50]/10 rounded-lg p-3 border border-[#4CAF50]/20"
+          >
+            {error.message}
+          </motion.div>
+        )}
 
-      <style jsx>{`
-        .login-container {
-          /* Bind theme tokens to container (scoped, inherited by children) */
-          --primary: ${theme.colors.primary};
-          --secondary: ${theme.colors.secondary};
-          --background: ${theme.colors.background};
-          --surface: ${theme.colors.surface};
-          --accent: ${theme.colors.accent};
-          --text-primary: ${theme.text.primary};
-          --text-secondary: ${theme.text.secondary};
-          --border-light: ${theme.borders.light};
-          --border-highlight: ${theme.borders.highlight};
-          --error: ${theme.status.error};
+        {/* Email Input */}
+        <div className="relative">
+          <motion.input
+            variants={inputVariants}
+            initial="rest"
+            whileFocus="focus"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email address"
+            className="w-full bg-transparent border border-[#333333] rounded-lg py-3 px-4 text-white placeholder-[#BFBFBF] focus:outline-none transition-all duration-300"
+          />
+          <MailIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#BFBFBF]" />
+        </div>
 
-          width: 100%;
-          min-height: 100vh;
-          background: linear-gradient(135deg, var(--background) 0%, #0a0a0a 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-          position: relative;
-          overflow: hidden; /* prevent blob overflow */
-        }
+        {/* Password Input (only for credentials) */}
+        {!isMagicLink && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="relative"
+          >
+            <motion.input
+              variants={inputVariants}
+              initial="rest"
+              whileFocus="focus"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full bg-transparent border border-[#333333] rounded-lg py-3 px-4 text-white placeholder-[#BFBFBF] focus:outline-none transition-all duration-300"
+            />
+            <LockIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#BFBFBF]" />
+          </motion.div>
+        )}
 
-        .login-wrapper {
-          width: 100%;
-          max-width: 420px;
-          background: var(--surface);
-          border: 1px solid var(--border-light);
-          border-radius: 16px;
-          padding: 48px 40px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-          position: relative;
-          z-index: 10;
-          animation: slideUp 0.6s ease-out;
-        }
+        {/* Submit Button */}
+        <motion.button
+          type="submit"
+          disabled={loading}
+          whileHover={{ scale: 1.02, backgroundColor: '#C9A227' }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full bg-[#D4AF37] hover:bg-[#C9A227] text-black font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+        >
+          {loading ? (
+            <svg className="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+          ) : isMagicLink ? (
+            'Send Magic Link'
+          ) : (
+            'Sign In with Email'
+          )}
+        </motion.button>
 
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .brand-section {
-          text-align: center;
-          margin-bottom: 40px;
-          animation: fadeIn 0.8s ease-out 0.1s both;
-        }
-        .brand-icon {
-          font-size: 32px;
-          margin-bottom: 16px;
-          color: var(--primary);
-          letter-spacing: 8px;
-        }
-        .brand-name {
-          font-size: 28px;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin-bottom: 4px;
-          letter-spacing: -0.5px;
-        }
-        .brand-subtitle {
-          font-size: 14px;
-          color: var(--text-secondary);
-          font-weight: 400;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-
-        .error-message {
-          background: rgba(229, 57, 53, 0.1);
-          border: 1px solid rgba(229, 57, 53, 0.3);
-          color: #ff6b6b;
-          padding: 12px 16px;
-          border-radius: 8px;
-          margin-bottom: 24px;
-          font-size: 14px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          animation: shake 0.3s ease-out;
-        }
-        .error-icon {
-          font-weight: bold;
-          font-size: 16px;
-        }
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25%  { transform: translateX(-5px); }
-          75%  { transform: translateX(5px); }
-        }
-
-        .login-form {
-          margin-bottom: 30px;
-        }
-        .form-group {
-          margin-bottom: 24px;
-        }
-        .form-label {
-          display: block;
-          font-size: 13px;
-          font-weight: 500;
-          color: var(--text-primary);
-          margin-bottom: 8px;
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
-        }
-        .form-input {
-          width: 100%;
-          padding: 12px 16px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid var(--border-light);
-          border-radius: 8px;
-          color: var(--text-primary);
-          font-size: 14px;
-          transition: all 0.3s ease;
-          outline: none;
-        }
-        .form-input:hover {
-          border-color: rgba(212, 175, 55, 0.3);
-          background: rgba(255, 255, 255, 0.05);
-        }
-        .form-input:focus {
-          border-color: var(--primary);
-          background: rgba(212, 175, 55, 0.05);
-          box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-        }
-        .form-input::placeholder {
-          color: var(--text-secondary);
-        }
-        .form-input:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .form-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 24px;
-          font-size: 13px;
-        }
-        .remember-me {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          cursor: pointer;
-          color: var(--text-secondary);
-          transition: color 0.3s ease;
-        }
-        .remember-me:hover { color: var(--text-primary); }
-        .remember-me input[type='checkbox'] {
-          cursor: pointer;
-          width: 14px;
-          height: 14px;
-          accent-color: var(--primary);
-        }
-        .forgot-password {
-          color: var(--primary);
-          text-decoration: none;
-          transition: color 0.3s ease;
-          font-weight: 500;
-        }
-        .forgot-password:hover { color: var(--accent); }
-
-        .login-button {
-          width: 100%;
-          padding: 13px 24px;
-          background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-          color: ${theme.buttons.primaryText};
-          border: none;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          letter-spacing: 0.5px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          text-transform: uppercase;
-        }
-        .login-button:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-        }
-        .login-button:active:not(:disabled) { transform: translateY(0); }
-        .login-button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .login-button.loading { gap: 10px; }
-
-        .spinner {
-          display: inline-block;
-          width: 14px;
-          height: 14px;
-          border: 2px solid rgba(0, 0, 0, 0.2);
-          border-top-color: #000000;
-          border-radius: 50%;
-          animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .divider {
-          display: flex;
-          align-items: center;
-          margin: 30px 0;
-          color: var(--text-secondary);
-          font-size: 13px;
-        }
-        .divider::before,
-        .divider::after {
-          content: '';
-          flex: 1;
-          height: 1px;
-          background: var(--border-light);
-        }
-        .divider span { padding: 0 12px; }
-
-        .social-login {
-          display: flex;
-          gap: 12px;
-          margin-bottom: 24px;
-        }
-        .social-button {
-          flex: 1;
-          padding: 11px 0;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid var(--border-light);
-          color: var(--text-primary);
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 12px;
-          font-weight: 500;
-          transition: all 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .social-button:hover:not(:disabled) {
-          border-color: rgba(212, 175, 55, 0.5);
-          background: rgba(212, 175, 55, 0.08);
-        }
-        .social-button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .social-button svg { width: 18px; height: 18px; }
-        .social-button.google:hover:not(:disabled) { color: #4285F4; }
-        .social-button.facebook:hover:not(:disabled) { color: #1877F2; }
-
-        .signup-link {
-          text-align: center;
-          font-size: 13px;
-          color: var(--text-secondary);
-        }
-        .signup-anchor {
-          color: var(--primary);
-          text-decoration: none;
-          font-weight: 600;
-          transition: color 0.3s ease;
-        }
-        .signup-anchor:hover { color: var(--accent); }
-
-        .gradient-blob {
-          position: absolute;
-          opacity: 0.05;
-          filter: blur(80px);
-          border-radius: 50%;
-          pointer-events: none;
-        }
-        .blob-1 {
-          width: 400px;
-          height: 400px;
-          background: var(--primary);
-          top: -100px;
-          left: -100px;
-          animation: float 6s ease-in-out infinite;
-        }
-        .blob-2 {
-          width: 300px;
-          height: 300px;
-          background: var(--accent);
-          bottom: -50px;
-          right: -50px;
-          animation: float 8s ease-in-out infinite reverse;
-        }
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0); }
-          50%      { transform: translate(30px, -30px); }
-        }
-
-        @media (max-width: 480px) {
-          .login-wrapper { padding: 32px 24px; }
-          .brand-name    { font-size: 24px; }
-          .form-footer   { flex-direction: column; gap: 12px; align-items: flex-start; }
-          .social-login  { flex-direction: column; }
-          .social-button { flex-direction: row; justify-content: center; }
-        }
-      `}</style>
+        {/* Toggle between magic link and password */}
+        <div className="text-center">
+          <button
+            type="button"
+            onClick={() => {
+              setIsMagicLink(!isMagicLink);
+              setPassword('');
+              setError('');
+            }}
+            className="text-sm text-[#D4AF37] hover:text-[#C9A227] transition-colors"
+          >
+            {isMagicLink ? 'Sign in with password instead' : 'Sign in with a magic link'}
+          </button>
+        </div>
+      </motion.form>
     </div>
+  );
+}
+
+// Icon components (inline SVGs)
+function GoogleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+    </svg>
+  );
+}
+
+function GithubIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+    </svg>
+  );
+}
+
+function MailIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+      <polyline points="22,6 12,13 2,6" />
+    </svg>
+  );
+}
+
+function LockIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0110 0v4" />
+    </svg>
   );
 }
