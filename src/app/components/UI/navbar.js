@@ -67,6 +67,18 @@ const Navbar = () => {
     setIsMobileDepartmentsOpen(false);
   }, [pathname]);
 
+  // Prevent background scrolling when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   const handleLogout = async () => {
     await signOut({ redirect: false });
     setIsUserMenuOpen(false);
@@ -75,8 +87,8 @@ const Navbar = () => {
 
   return (
     <nav className="bg-black border-b border-gray-800 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-22">
+        <div className="flex justify-between items-center h-22 sm:h-22">
           {/* Logo */}
           <Link
             href="/"
@@ -196,11 +208,12 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile hamburger button (visible only on mobile) */}
+          {/* Mobile hamburger button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 rounded-md text-yellow-500 hover:bg-gray-900 transition-colors active:bg-gray-800 min-h-10 min-w-10 flex items-center justify-center"
-            aria-label="Toggle menu"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
           >
             <svg
               className="w-6 h-6"
@@ -228,28 +241,32 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu (expands with animation) */}
+      {/* Mobile menu – correctly expands / collapses */}
       <div
         className={`md:hidden overflow-hidden border-t border-gray-800 transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "max-h-[calc(100dvh-5.5rem)] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-3 sm:px-4 pt-3 pb-4 space-y-2 bg-gray-950 overflow-y-auto max-h-[80vh]">
+        <div className="px-3 pt-3 pb-4 space-y-2 bg-gray-950 overflow-y-auto max-h-[calc(100dvh-5.5rem)]">
           {navLinks.map((link) => (
             <div key={link.name}>
               {link.name === "Courses" ? (
                 <>
                   <button
-                    onClick={() => setIsMobileDepartmentsOpen(!isMobileDepartmentsOpen)}
-                    className={`w-full text-left block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors flex items-center justify-between ${
+                    onClick={() =>
+                      setIsMobileDepartmentsOpen(!isMobileDepartmentsOpen)
+                    }
+                    aria-expanded={isMobileDepartmentsOpen}
+                    className={`w-full text-left py-2.5 font-medium transition-colors flex items-center justify-between ${
                       isActive(link.href)
                         ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
                         : "text-gray-400 hover:text-yellow-500 pl-4"
                     }`}
                   >
                     <span>{link.name}</span>
+                    {/* Chevron icon */}
                     <svg
-                      className={`w-4 h-4 transition-transform ${
+                      className={`w-4 h-4 transition-transform duration-200 ${
                         isMobileDepartmentsOpen ? "rotate-180" : ""
                       }`}
                       fill="none"
@@ -260,14 +277,20 @@ const Navbar = () => {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                        d="M19 9l-7 7-7-7"
                       />
                     </svg>
                   </button>
 
                   {/* Mobile departments dropdown */}
-                  {isMobileDepartmentsOpen && (
-                    <div className="ml-3 sm:ml-5 mt-2 space-y-1 rounded-lg border border-gray-800 bg-gray-900 p-2">
+                  <div
+                    className={`ml-5 mt-2 rounded-lg border border-gray-800 bg-gray-900 overflow-hidden transition-all duration-300 ${
+                      isMobileDepartmentsOpen
+                        ? "max-h-96 opacity-100"
+                        : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <div className="p-2 space-y-1">
                       {departmentLinks.map((dept) => (
                         <Link
                           key={dept.name}
@@ -276,19 +299,19 @@ const Navbar = () => {
                             setIsOpen(false);
                             setIsMobileDepartmentsOpen(false);
                           }}
-                          className="block rounded-md px-2 py-1.5 text-xs sm:text-sm text-gray-400 transition-colors hover:bg-gray-800 hover:text-yellow-500"
+                          className="block rounded-md px-2 py-1.5 text-sm text-gray-400 transition-colors hover:bg-gray-800 hover:text-yellow-500"
                         >
                           {dept.name}
                         </Link>
                       ))}
                     </div>
-                  )}
+                  </div>
                 </>
               ) : (
                 <Link
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors ${
+                  className={`block py-2.5 font-medium transition-colors ${
                     isActive(link.href)
                       ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
                       : "text-gray-400 hover:text-yellow-500 pl-4"
@@ -303,8 +326,8 @@ const Navbar = () => {
           {/* Mobile auth section */}
           <div className="pt-3 border-t border-gray-800">
             {isLoggedIn ? (
-              <div>
-                <div className="flex items-center space-x-3 mb-3">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden bg-gray-900 flex items-center justify-center flex-shrink-0">
                     {session.user.image && !imageError ? (
                       <img
@@ -324,25 +347,25 @@ const Navbar = () => {
                       {session.user.name}
                     </p>
                     <p className="text-xs text-gray-500 truncate">
-                      {session.user.provider === "google" ? "Google" : "User"}
+                      {session.user.email}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="w-full px-4 sm:px-5 py-2 sm:py-2.5 border border-yellow-500 text-yellow-500 text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
+                  className="w-full py-3 px-4 border border-yellow-500 text-yellow-500 font-semibold rounded-md active:bg-yellow-500/10"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col gap-2 sm:gap-3">
+              <div className="flex flex-col gap-3">
                 <button
                   onClick={() => {
                     router.push("/auth/userlogin");
                     setIsOpen(false);
                   }}
-                  className="w-full px-4 sm:px-5 py-2 sm:py-2.5 border border-yellow-500 text-yellow-500 text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
+                  className="w-full py-3 px-4 border border-yellow-500 text-yellow-500 font-semibold rounded-md"
                 >
                   Login
                 </button>
@@ -351,7 +374,7 @@ const Navbar = () => {
                     router.push("/auth/register");
                     setIsOpen(false);
                   }}
-                  className="w-full px-4 sm:px-5 py-2 sm:py-2.5 bg-yellow-500 text-black text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20"
+                  className="w-full py-3 px-4 bg-yellow-500 text-black font-semibold rounded-md"
                 >
                   Get Started
                 </button>
