@@ -6,6 +6,11 @@ LIBRARY
                     page.js
                 adminLogin
                     page.js
+                auth
+                    register
+                        page.js
+                    userlogin
+                        page.js
                 course
                     [id]
                         page.js
@@ -15,6 +20,10 @@ LIBRARY
                 explore
                     page.js
                 library
+                    page.js
+                userprofile
+                    [id]
+                        page.js
                     page.js
 
             admin
@@ -44,15 +53,17 @@ LIBRARY
                             route.js
                         route.js
                 auth
-                    login
+                    [...nextauth]
                         route.js
                     register
                         route.js
             components
                 additionals
+                    authProvider.js
                     protetctedAdmin.js
                     useerContext.js
                 UI
+                    bookpdf.js
                     navbar.js
             data
                 knowlage.js
@@ -63,6 +74,7 @@ LIBRARY
             layout.js
             page.js
         lib
+            auth.js
             booksCategories.js
             cloudnairly.js
             DBconnection.js
@@ -70,10 +82,13 @@ LIBRARY
         md
             book.md
             colour.md
+            nextauth.md
             sturcture.md
             user.md
         models
             admin.js
             books.js
+            review.js
             user.js
+            vistor.js
 |.env.local
