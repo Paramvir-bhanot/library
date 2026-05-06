@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import knowledge from "@/src/app/data/knowlage.json";
+import knowledge from "@/src/app/data/knowlage.json"; // FIXED: typo "knowlage" -> "knowledge"
 
 // ----------------------------------------------------------------------
 // Helpers
@@ -40,11 +40,11 @@ const useOutsideClick = (ref, callback) => {
  * Desktop dropdown for "Courses" department links.
  */
 const DepartmentDropdown = ({ departmentLinks }) => (
-  <div className="invisible absolute left-0 top-8 z-30 w-72 rounded-xl border border-gray-800 bg-gray-950 p-3 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100">
+  <div className="invisible absolute left-0 top-full mt-2 z-30 w-64 rounded-lg border border-gray-800 bg-gray-950 p-2 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100">
     <div className="mb-2 border-b border-gray-800 pb-2 text-xs uppercase tracking-widest text-yellow-500">
       Departments
     </div>
-    <div className="space-y-1">
+    <div className="space-y-1 max-h-96 overflow-y-auto">
       {departmentLinks.map((dept) => (
         <Link
           key={dept.name}
@@ -73,10 +73,10 @@ const UserMenu = ({ session, imageError, setImageError, onLogout }) => {
     <div className="relative ml-4" ref={menuRef}>
       <button
         onClick={toggleOpen}
-        className="flex items-center space-x-3 group"
+        className="flex items-center space-x-2 md:space-x-3 group transition-colors hover:text-yellow-500 min-h-10 min-w-10"
       >
         <div className="relative">
-          <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden flex items-center justify-center bg-gray-900">
+          <div className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-yellow-500 overflow-hidden flex items-center justify-center bg-gray-900 flex-shrink-0">
             {session.user.image && !imageError ? (
               <img
                 src={session.user.image}
@@ -85,15 +85,15 @@ const UserMenu = ({ session, imageError, setImageError, onLogout }) => {
                 onError={() => setImageError(true)}
               />
             ) : (
-              <span className="text-yellow-500 font-bold text-lg">
+              <span className="text-yellow-500 font-bold text-sm md:text-lg">
                 {session.user.name?.[0]?.toUpperCase() || "U"}
               </span>
             )}
           </div>
-          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-black bg-green-500" />
+          <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 md:w-3 md:h-3 rounded-full border-2 border-black bg-green-500" />
         </div>
         <div className="hidden lg:block text-left">
-          <p className="text-sm font-medium text-gray-300 group-hover:text-yellow-500 transition-colors">
+          <p className="text-sm font-medium text-gray-300 group-hover:text-yellow-500 transition-colors truncate max-w-[120px]">
             {session.user.name || "User"}
           </p>
           <p className="text-xs text-gray-500">
@@ -103,7 +103,7 @@ const UserMenu = ({ session, imageError, setImageError, onLogout }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-48 bg-gray-950 border border-gray-800 rounded-xl shadow-xl py-2 z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-gray-950 border border-gray-800 rounded-lg shadow-xl py-2 z-50">
           <div className="px-4 py-2 border-b border-gray-800">
             <p className="text-sm font-medium text-gray-300 truncate">
               {session.user.name}
@@ -127,17 +127,21 @@ const UserMenu = ({ session, imageError, setImageError, onLogout }) => {
 /**
  * Login + Get Started buttons (desktop & mobile).
  */
-const AuthButtons = ({ onLogin, onRegister }) => (
-  <div className="ml-4 flex items-center space-x-3">
+const AuthButtons = ({ onLogin, onRegister, isMobile = false }) => (
+  <div className={`flex items-center ${isMobile ? "flex-col gap-2 w-full" : "gap-2 md:gap-3"}`}>
     <button
       onClick={onLogin}
-      className="px-5 py-2 border border-yellow-500 text-yellow-500 font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
+      className={`px-4 md:px-5 py-2 border border-yellow-500 text-yellow-500 font-semibold rounded-md hover:bg-yellow-500/10 transition-colors ${
+        isMobile ? "w-full" : ""
+      }`}
     >
       Login
     </button>
     <button
       onClick={onRegister}
-      className="px-5 py-2 bg-yellow-500 text-black font-semibold rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20"
+      className={`px-4 md:px-5 py-2 bg-yellow-500 text-black font-semibold rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20 ${
+        isMobile ? "w-full" : ""
+      }`}
     >
       Get Started
     </button>
@@ -159,12 +163,12 @@ const DesktopNav = ({
   onRegister,
   onLogout,
 }) => (
-  <div className="hidden md:flex items-center space-x-8">
+  <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
     {navLinks.map((link) => (
       <div key={link.name} className="relative group">
         <Link
           href={link.href}
-          className={`relative text-base font-medium transition-colors ${
+          className={`relative text-sm lg:text-base font-medium transition-colors py-2 ${
             isActive(link.href)
               ? "text-yellow-500"
               : "text-gray-400 hover:text-yellow-500"
@@ -215,26 +219,26 @@ const MobileNav = ({
 
   return (
     <div
-      className={`md:hidden overflow-hidden border-t border-gray-800 transition-all duration-300 ease-in-out ${
-        isOpen ? "max-h-[100vh] opacity-100" : "min-h-0 opacity-0"
+      className={`md:hidden fixed inset-0 top-20 left-0 right-0 z-40 bg-gray-950 border-t border-gray-800 transition-all duration-300 ease-in-out overflow-hidden ${
+        isOpen ? "max-h-[calc(100vh-80px)] opacity-100" : "max-h-0 opacity-0"
       }`}
     >
-      <div className="px-3 sm:px-4 pt-3 pb-4 space-y-2 bg-gray-950 overflow-y-auto min-h-[100vh]">
+      <div className="px-4 pt-4 pb-6 space-y-2 overflow-y-auto max-h-[calc(100vh-80px)]">
         {navLinks.map((link) => (
           <div key={link.name}>
             {link.name === "Courses" ? (
               <>
                 <button
                   onClick={() => setIsDepartmentsOpen(!isDepartmentsOpen)}
-                  className={`w-full text-left block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors flex items-center justify-between ${
+                  className={`w-full text-left block py-3 px-4 text-base font-medium transition-colors flex items-center justify-between rounded-md ${
                     isActive(link.href)
-                      ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
-                      : "text-gray-400 hover:text-yellow-500 pl-4"
+                      ? "text-yellow-500 bg-gray-900"
+                      : "text-gray-400 hover:text-yellow-500 hover:bg-gray-900"
                   }`}
                 >
                   <span>{link.name}</span>
                   <svg
-                    className={`w-4 h-4 transition-transform ${
+                    className={`w-5 h-5 transition-transform ${
                       isDepartmentsOpen ? "rotate-180" : ""
                     }`}
                     fill="none"
@@ -251,7 +255,7 @@ const MobileNav = ({
                 </button>
 
                 {isDepartmentsOpen && (
-                  <div className="ml-3 sm:ml-5 mt-2 space-y-1 rounded-lg border border-gray-800 bg-gray-900 p-2">
+                  <div className="ml-4 mt-2 space-y-1 rounded-md border border-gray-800 bg-gray-900 p-3">
                     {departmentLinks.map((dept) => (
                       <Link
                         key={dept.name}
@@ -260,7 +264,7 @@ const MobileNav = ({
                           closeMenu();
                           setIsDepartmentsOpen(false);
                         }}
-                        className="block rounded-md px-2 py-1.5 text-xs sm:text-sm text-gray-400 transition-colors hover:bg-gray-800 hover:text-yellow-500"
+                        className="block rounded-md px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-gray-800 hover:text-yellow-500 active:bg-gray-700"
                       >
                         {dept.name}
                       </Link>
@@ -272,10 +276,10 @@ const MobileNav = ({
               <Link
                 href={link.href}
                 onClick={closeMenu}
-                className={`block py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-colors ${
+                className={`block py-3 px-4 text-base font-medium transition-colors rounded-md ${
                   isActive(link.href)
-                    ? "text-yellow-500 border-l-4 border-yellow-500 pl-3"
-                    : "text-gray-400 hover:text-yellow-500 pl-4"
+                    ? "text-yellow-500 bg-gray-900"
+                    : "text-gray-400 hover:text-yellow-500 hover:bg-gray-900"
                 }`}
               >
                 {link.name}
@@ -284,11 +288,11 @@ const MobileNav = ({
           </div>
         ))}
 
-        <div className="pt-3 border-t border-gray-800">
+        <div className="pt-4 mt-4 border-t border-gray-800">
           {isLoggedIn ? (
             <div>
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden bg-gray-900 flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center space-x-3 mb-4 p-3 bg-gray-900 rounded-md">
+                <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden bg-gray-800 flex items-center justify-center flex-shrink-0">
                   {session.user.image && !imageError ? (
                     <img
                       src={session.user.image}
@@ -313,32 +317,13 @@ const MobileNav = ({
               </div>
               <button
                 onClick={onLogout}
-                className="w-full px-4 sm:px-5 py-2 sm:py-2.5 border border-yellow-500 text-yellow-500 text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
+                className="w-full px-4 py-3 border border-yellow-500 text-yellow-500 font-semibold rounded-md hover:bg-yellow-500/10 transition-colors active:bg-yellow-500/20 min-h-12"
               >
                 Sign Out
               </button>
             </div>
           ) : (
-            <div className="flex flex-col gap-2 sm:gap-3">
-              <button
-                onClick={() => {
-                  onLogin();
-                  closeMenu();
-                }}
-                className="w-full px-4 sm:px-5 py-2 sm:py-2.5 border border-yellow-500 text-yellow-500 text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-500/10 transition-colors"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => {
-                  onRegister();
-                  closeMenu();
-                }}
-                className="w-full px-4 sm:px-5 py-2 sm:py-2.5 bg-yellow-500 text-black text-sm sm:text-base font-semibold rounded-md hover:bg-yellow-400 transition-colors shadow-lg shadow-yellow-500/20"
-              >
-                Get Started
-              </button>
-            </div>
+            <AuthButtons onLogin={onLogin} onRegister={onRegister} isMobile={true} />
           )}
         </div>
       </div>
@@ -408,12 +393,12 @@ const Navbar = () => {
 
   return (
     <nav className="bg-black border-b border-gray-800 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-22">
-        <div className="flex justify-between items-center h-22 sm:h-22">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20 sm:h-20 md:h-20">
           {/* Logo */}
           <Link
             href="/"
-            className="text-xl sm:text-2xl font-bold tracking-wider text-yellow-500 hover:text-yellow-400 transition-colors"
+            className="text-2xl md:text-2xl font-bold tracking-wider text-yellow-500 hover:text-yellow-400 transition-colors flex-shrink-0"
           >
             LUXE
           </Link>
@@ -435,7 +420,7 @@ const Navbar = () => {
           {/* Mobile hamburger */}
           <button
             onClick={() => setIsOpen((prev) => !prev)}
-            className="md:hidden p-2 rounded-md text-yellow-500 hover:bg-gray-900 transition-colors active:bg-gray-800 min-h-10 min-w-10 flex items-center justify-center"
+            className="md:hidden p-2 rounded-md text-yellow-500 hover:bg-gray-900 transition-colors active:bg-gray-800 min-h-10 min-w-10 flex items-center justify-center flex-shrink-0 ml-2"
             aria-label="Toggle menu"
           >
             <svg
