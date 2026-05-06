@@ -217,114 +217,128 @@ const MobileNav = ({
 }) => {
   const [isDepartmentsOpen, setIsDepartmentsOpen] = useState(false);
 
+  // Reset departments menu when mobile menu closes
+  useEffect(() => {
+    if (!isOpen) {
+      setIsDepartmentsOpen(false);
+    }
+  }, [isOpen]);
+
   return (
     <div
-      className={`md:hidden fixed inset-0 top-20 left-0 right-0 z-40 bg-gray-950 border-t border-gray-800 transition-all duration-300 ease-in-out overflow-hidden ${
-        isOpen ? "max-h-[calc(100vh-80px)] opacity-100" : "max-h-0 opacity-0"
+      className={`md:hidden fixed inset-0 top-20 left-0 right-0 z-40 bg-gray-950 border-t border-gray-800 transition-all duration-300 ease-in-out ${
+        isOpen ? "max-h-[calc(100vh-80px)] opacity-100 visible" : "max-h-0 opacity-0 invisible"
       }`}
     >
-      <div className="px-4 pt-4 pb-6 space-y-2 overflow-y-auto max-h-[calc(100vh-80px)]">
-        {navLinks.map((link) => (
-          <div key={link.name}>
-            {link.name === "Courses" ? (
-              <>
-                <button
-                  onClick={() => setIsDepartmentsOpen(!isDepartmentsOpen)}
-                  className={`w-full text-left block py-3 px-4 text-base font-medium transition-colors flex items-center justify-between rounded-md ${
+      <div className="h-[calc(100vh-80px)] overflow-y-auto">
+        <div className="px-4 pt-4 pb-20 space-y-1">
+          {navLinks.map((link) => (
+            <div key={link.name}>
+              {link.name === "Courses" ? (
+                <>
+                  <button
+                    onClick={() => setIsDepartmentsOpen(!isDepartmentsOpen)}
+                    className={`w-full text-left py-3 px-4 text-base font-medium transition-all duration-200 flex items-center justify-between rounded-md ${
+                      isActive(link.href)
+                        ? "text-yellow-500 bg-gray-900"
+                        : "text-gray-400 hover:text-yellow-500 hover:bg-gray-900"
+                    }`}
+                  >
+                    <span>{link.name}</span>
+                    <svg
+                      className={`w-5 h-5 transition-transform duration-300 ${
+                        isDepartmentsOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown with smooth animation */}
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      isDepartmentsOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <div className="ml-4 mt-2 space-y-1 rounded-md border border-gray-700 bg-gray-900 p-3">
+                      {departmentLinks.map((dept) => (
+                        <Link
+                          key={dept.name}
+                          href={dept.href}
+                          onClick={() => {
+                            closeMenu();
+                            setIsDepartmentsOpen(false);
+                          }}
+                          className="block rounded-md px-3 py-2.5 text-sm text-gray-400 transition-colors duration-200 hover:bg-gray-800 hover:text-yellow-500 active:bg-gray-700"
+                        >
+                          {dept.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Link
+                  href={link.href}
+                  onClick={closeMenu}
+                  className={`block py-3 px-4 text-base font-medium transition-colors duration-200 rounded-md ${
                     isActive(link.href)
                       ? "text-yellow-500 bg-gray-900"
                       : "text-gray-400 hover:text-yellow-500 hover:bg-gray-900"
                   }`}
                 >
-                  <span>{link.name}</span>
-                  <svg
-                    className={`w-5 h-5 transition-transform ${
-                      isDepartmentsOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                    />
-                  </svg>
-                </button>
+                  {link.name}
+                </Link>
+              )}
+            </div>
+          ))}
 
-                {isDepartmentsOpen && (
-                  <div className="ml-4 mt-2 space-y-1 rounded-md border border-gray-800 bg-gray-900 p-3">
-                    {departmentLinks.map((dept) => (
-                      <Link
-                        key={dept.name}
-                        href={dept.href}
-                        onClick={() => {
-                          closeMenu();
-                          setIsDepartmentsOpen(false);
-                        }}
-                        className="block rounded-md px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-gray-800 hover:text-yellow-500 active:bg-gray-700"
-                      >
-                        {dept.name}
-                      </Link>
-                    ))}
+          <div className="pt-6 mt-6 border-t border-gray-800">
+            {isLoggedIn ? (
+              <div>
+                <div className="flex items-center space-x-3 mb-4 p-3 bg-gray-900 rounded-md">
+                  <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden bg-gray-800 flex items-center justify-center flex-shrink-0">
+                    {session.user.image && !imageError ? (
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name || "User"}
+                        className="w-full h-full object-cover"
+                        onError={() => setImageError(true)}
+                      />
+                    ) : (
+                      <span className="text-yellow-500 font-bold text-lg">
+                        {session.user.name?.[0]?.toUpperCase() || "U"}
+                      </span>
+                    )}
                   </div>
-                )}
-              </>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-gray-300 truncate">
+                      {session.user.name}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {session.user.provider === "google" ? "Google" : "User"}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={onLogout}
+                  className="w-full px-4 py-3 border border-yellow-500 text-yellow-500 font-semibold rounded-md hover:bg-yellow-500/10 transition-colors active:bg-yellow-500/20 min-h-12"
+                >
+                  Sign Out
+                </button>
+              </div>
             ) : (
-              <Link
-                href={link.href}
-                onClick={closeMenu}
-                className={`block py-3 px-4 text-base font-medium transition-colors rounded-md ${
-                  isActive(link.href)
-                    ? "text-yellow-500 bg-gray-900"
-                    : "text-gray-400 hover:text-yellow-500 hover:bg-gray-900"
-                }`}
-              >
-                {link.name}
-              </Link>
+              <AuthButtons onLogin={onLogin} onRegister={onRegister} isMobile={true} />
             )}
           </div>
-        ))}
-
-        <div className="pt-4 mt-4 border-t border-gray-800">
-          {isLoggedIn ? (
-            <div>
-              <div className="flex items-center space-x-3 mb-4 p-3 bg-gray-900 rounded-md">
-                <div className="w-10 h-10 rounded-full border-2 border-yellow-500 overflow-hidden bg-gray-800 flex items-center justify-center flex-shrink-0">
-                  {session.user.image && !imageError ? (
-                    <img
-                      src={session.user.image}
-                      alt={session.user.name || "User"}
-                      className="w-full h-full object-cover"
-                      onError={() => setImageError(true)}
-                    />
-                  ) : (
-                    <span className="text-yellow-500 font-bold text-lg">
-                      {session.user.name?.[0]?.toUpperCase() || "U"}
-                    </span>
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-300 truncate">
-                    {session.user.name}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate">
-                    {session.user.provider === "google" ? "Google" : "User"}
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={onLogout}
-                className="w-full px-4 py-3 border border-yellow-500 text-yellow-500 font-semibold rounded-md hover:bg-yellow-500/10 transition-colors active:bg-yellow-500/20 min-h-12"
-              >
-                Sign Out
-              </button>
-            </div>
-          ) : (
-            <AuthButtons onLogin={onLogin} onRegister={onRegister} isMobile={true} />
-          )}
         </div>
       </div>
     </div>
