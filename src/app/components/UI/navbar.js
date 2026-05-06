@@ -265,23 +265,25 @@ const MobileNav = ({
                   {/* Dropdown with smooth animation */}
                   <div
                     className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      isDepartmentsOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                      isDepartmentsOpen ? "max-h-[70vh] opacity-100" : "max-h-0 opacity-0"
                     }`}
                   >
-                    <div className="ml-4 mt-2 space-y-1 rounded-md border border-gray-700 bg-gray-900 p-3">
-                      {departmentLinks.map((dept) => (
-                        <Link
-                          key={dept.name}
-                          href={dept.href}
-                          onClick={() => {
-                            closeMenu();
-                            setIsDepartmentsOpen(false);
-                          }}
-                          className="block rounded-md px-3 py-2.5 text-sm text-gray-400 transition-colors duration-200 hover:bg-gray-800 hover:text-yellow-500 active:bg-gray-700"
-                        >
-                          {dept.name}
-                        </Link>
-                      ))}
+                    <div className="mt-2 w-full space-y-1 rounded-md border border-gray-700 bg-gray-900 p-3">
+                      <div className="max-h-[60vh] overflow-y-auto pr-1">
+                        {departmentLinks.map((dept) => (
+                          <Link
+                            key={dept.name}
+                            href={dept.href}
+                            onClick={() => {
+                              closeMenu();
+                              setIsDepartmentsOpen(false);
+                            }}
+                            className="block rounded-md px-3 py-2.5 text-sm text-gray-400 transition-colors duration-200 hover:bg-gray-800 hover:text-yellow-500 active:bg-gray-700"
+                          >
+                            {dept.name}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </>
