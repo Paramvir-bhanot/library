@@ -223,7 +223,7 @@ export default function AllCoursesPage() {
           className="text-gray-400 text-lg max-w-2xl mx-auto"
         >
           Discover distance learning programs designed for your success at
-          Lovely Professional University.
+          Books Junction.
         </motion.p>
       </section>
 

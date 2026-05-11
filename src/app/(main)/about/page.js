@@ -381,7 +381,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
             className="text-[#BFBFBF] text-base md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Lovely Professional University brings world-class education to your doorstep. 
+            Books Junction brings world-class education to your doorstep. 
             Pursue your dreams with our flexible distance and online programs designed for 
             the modern learner.
           </motion.p>
@@ -473,7 +473,7 @@ export default function AboutPage() {
               </h2>
               <GoldDivider />
               <p className="text-[#BFBFBF] text-base md:text-lg leading-relaxed">
-                At Lovely Professional University, we believe that quality education should have no boundaries. 
+                At Books Junction, we believe that quality education should have no boundaries. 
                 Our distance and online programs are meticulously crafted to deliver the same academic rigor and 
                 industry relevance as our on-campus offerings.
               </p>
@@ -561,7 +561,7 @@ export default function AboutPage() {
             </div>
             <div className="text-left">
               <p className="text-white font-semibold">Dr. Ashok Kumar Mittal</p>
-              <p className="text-[#BFBFBF] text-sm">Chancellor, Lovely Professional University</p>
+              <p className="text-[#BFBFBF] text-sm">Chancellor, Books Junction</p>
             </div>
           </motion.div>
         </div>
@@ -627,7 +627,7 @@ export default function AboutPage() {
                 <span className="text-lg font-bold text-white">LPU Distance</span>
               </div>
               <p className="text-[#BFBFBF] text-sm leading-relaxed">
-                Empowering learners worldwide with quality distance and online education from Lovely Professional University.
+                Empowering learners worldwide with quality distance and online education from Books Junction.
               </p>
             </div>
             <div>
@@ -669,7 +669,7 @@ export default function AboutPage() {
           </div>
           <div className="border-t border-[#333333]/30 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-[#BFBFBF]/60 text-xs">
-              &copy; {new Date().getFullYear()} Lovely Professional University. All rights reserved.
+              &copy; {new Date().getFullYear()} Books Junction. All rights reserved.
             </p>
             <div className="flex gap-4 text-xs text-[#BFBFBF]/60">
               <Link href="/privacy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</Link>
