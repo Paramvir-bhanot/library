@@ -28,6 +28,15 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
         </AuthProvider>
+        <footer className="mt-auto">
+          <div className="bg-black border-t border-[#333333] text-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+              {/* Main grid: responsive columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+              </div>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );

@@ -2,40 +2,102 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
-
-// Dummy user data – replace with your actual fetch (e.g., from session or API)
-const dummyUser = {
-  name: 'Ava Sinclair',
-  email: 'ava.sinclair@example.com',
-  image: null, // will show initials instead
-  provider: 'credentials',
-  degree: 'Master',
-  subject: 'Computer Science',
-  medium: 'English',
-  likedBooks: [
-    'Clean Code',
-    'The Pragmatic Programmer',
-    'Design Patterns',
-    'You Don’t Know JS',
-  ],
-  savedNotes: ['React Hooks Guide', 'MongoDB Aggregation Tips', 'Tailwind Cheat Sheet'],
-  isSubscribed: true,
-  applicantId: '65f1a2b3c4d5e6f7a8b9c0d1',
-};
-
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Footer from '../../../app/components/UI/footer'; 
 export default function DashboardPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const LOCAL_PROFILE_KEY = 'user_profile_v1';
 
-  // Simulate data fetching
+  // Load cached profile from localStorage immediately for instant UI
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setUser(dummyUser);
-      setLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
+    try {
+      if (typeof window === 'undefined') return;
+      const cached = window.localStorage.getItem(LOCAL_PROFILE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        setUser(parsed);
+        setLoading(false);
+      }
+    } catch (e) {
+      console.warn('Failed to read cached profile', e);
+    }
   }, []);
+
+  // Fetch user profile data and combine with session data
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/userlogin');
+      return;
+    }
+
+    if (status === 'authenticated' && session?.user) {
+      const fetchUserProfile = async () => {
+        try {
+          setLoading(true);
+          // Get full user profile from API
+          const response = await fetch('/api/user/profile', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch user profile');
+          }
+
+          const profileData = await response.json();
+          
+          // Combine session data with profile data
+          const combinedUser = {
+            name: session.user.name || profileData.name || 'User',
+            email: session.user.email || profileData.email,
+            image: session.user.image || profileData.image,
+            provider: profileData.provider || 'google',
+            degree: profileData.degree || 'Other',
+            subject: profileData.subject || 'Not specified',
+            medium: profileData.medium || 'English',
+            likedBooks: profileData.likedBooks || [],
+            savedNotes: profileData.savedNotes || [],
+            isSubscribed: profileData.isSubscribed || false,
+            applicantId: profileData.applicantId || null,
+          };
+          
+          setUser(combinedUser);
+          try { window.localStorage.setItem(LOCAL_PROFILE_KEY, JSON.stringify(combinedUser)); } catch (e) {}
+          setError(null);
+        } catch (err) {
+          console.error('Error fetching user profile:', err);
+          // Fallback to session data if API fails
+          const fallbackUser = {
+            name: session.user.name || 'User',
+            email: session.user.email,
+            image: session.user.image,
+            provider: session.user.provider || 'google',
+            degree: 'Other',
+            subject: 'Not specified',
+            medium: 'English',
+            likedBooks: [],
+            savedNotes: [],
+            isSubscribed: false,
+            applicantId: null,
+          };
+          setUser(fallbackUser);
+          try { window.localStorage.setItem(LOCAL_PROFILE_KEY, JSON.stringify(fallbackUser)); } catch (e) {}
+          setError(null);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserProfile();
+    }
+  }, [status, session, router]);
 
   if (loading) {
     return (
@@ -69,12 +131,14 @@ export default function DashboardPage() {
         >
           <div className="flex items-center gap-4">
             {/* Avatar */}
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#111111] border-2 border-[#D4AF37] flex items-center justify-center text-2xl font-bold text-[#D4AF37]">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#111111] border-2 border-[#D4AF37] flex items-center justify-center text-2xl font-bold text-[#D4AF37] overflow-hidden flex-shrink-0">
               {user.image ? (
-                <img
+                <Image
                   src={user.image}
                   alt={user.name}
-                  className="w-full h-full rounded-full object-cover"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 user.name
@@ -83,8 +147,8 @@ export default function DashboardPage() {
                   .join('')
                   .toUpperCase()
               )}
-            </div>
-            <div>
+            </div>  
+            <div> 
               <h1 className="text-2xl sm:text-3xl font-light tracking-wide">
                 Welcome back,{' '}
                 <span className="text-[#D4AF37] font-medium">{user.name.split(' ')[0]}</span>
@@ -94,11 +158,11 @@ export default function DashboardPage() {
           </div>
           <div className="flex gap-2">
             <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#111111] border border-[#333333] text-[#BFBFBF]">
-              {user.provider === 'credentials' ? '🔐 Email/Password' : user.provider}
+              {user.provider === 'credentials' ? '?? Email/Password' : `?? ${user.provider}`}
             </span>
             {user.isSubscribed && (
               <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#D4AF37] text-black border border-transparent">
-                ⭐ Subscribed
+                ? Subscribed
               </span>
             )}
           </div>
@@ -111,10 +175,10 @@ export default function DashboardPage() {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
         >
-          <StatCard icon="🎓" label="Degree" value={user.degree} />
-          <StatCard icon="📚" label="Subject" value={user.subject || 'Not set'} />
-          <StatCard icon="🌐" label="Language" value={user.medium} />
-          <StatCard icon="📌" label="Applicant ID" value={user.applicantId ? user.applicantId.slice(-6) : 'N/A'} />
+          <StatCard icon="??" label="Degree" value={user.degree} />
+          <StatCard icon="??" label="Subject" value={user.subject || 'Not set'} />
+          <StatCard icon="??" label="Language" value={user.medium} />
+          <StatCard icon="??" label="Applicant ID" value={user.applicantId ? user.applicantId.slice(-6) : 'N/A'} />
         </motion.div>
 
         {/* Liked Books & Saved Notes */}
@@ -127,7 +191,7 @@ export default function DashboardPage() {
             className="bg-[#111111] border border-[#333333] rounded-xl p-5 hover:border-[#D4AF37] transition-colors duration-300"
           >
             <h2 className="text-xl font-semibold text-[#D4AF37] mb-4 flex items-center gap-2">
-              📖 Liked Books
+              ?? Liked Books
             </h2>
             {user.likedBooks.length > 0 ? (
               <ul className="space-y-3">
@@ -155,7 +219,7 @@ export default function DashboardPage() {
             className="bg-[#111111] border border-[#333333] rounded-xl p-5 hover:border-[#D4AF37] transition-colors duration-300"
           >
             <h2 className="text-xl font-semibold text-[#D4AF37] mb-4 flex items-center gap-2">
-              📝 Saved Notes
+              ?? Saved Notes
             </h2>
             {user.savedNotes.length > 0 ? (
               <ul className="space-y-3">
@@ -183,7 +247,7 @@ export default function DashboardPage() {
           transition={{ delay: 0.8 }}
           className="text-center text-xs text-[#333333] mt-8"
         >
-          Luxury Dashboard &middot; All your academic data at a glance
+          User Profile Dashboard � All your academic data at a glance
         </motion.p>
       </div>
     </div>

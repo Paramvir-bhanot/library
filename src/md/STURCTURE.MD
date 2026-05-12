@@ -1,4 +1,4 @@
-LIBRARY
+books junction
 |    scr
         app
             (main)
@@ -57,6 +57,17 @@ LIBRARY
                         route.js
                     register
                         route.js
+                student
+                    data.js
+                user
+                    liked-books
+                        route.js
+                    profile
+                        update
+                           route.js
+                        route.js
+                    saved-notes
+                        route.js     
             components
                 additionals
                     authProvider.js
@@ -64,6 +75,7 @@ LIBRARY
                     useerContext.js
                 UI
                     bookpdf.js
+                    footer.js
                     navbar.js
             data
                 knowlage.js
@@ -85,6 +97,7 @@ LIBRARY
             nextauth.md
             sturcture.md
             user.md
+            vistor.md
         models
             admin.js
             books.js

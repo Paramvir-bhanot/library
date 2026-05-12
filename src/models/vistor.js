@@ -1,4 +1,3 @@
-import User from './user';
+import User, { Visitor } from './user';
 
-// Backward-compatible alias: keep existing imports working.
-export default User;
+export default Visitor || User;

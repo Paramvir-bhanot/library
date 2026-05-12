@@ -1,6 +1,6 @@
 import Link from "next/link";
 import knowledge from "@/src/app/data/knowlage.json";
-
+import Footer from "../../../app/components/UI/footer";
 function toSlug(value) {
   return value
     .toLowerCase()
@@ -73,6 +73,7 @@ export default function CoursePage() {
           ))}
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

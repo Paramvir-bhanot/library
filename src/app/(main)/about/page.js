@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-
+import footer from "../../../app/components/UI/footer";
 // --- Icon Components (inline SVG for zero dependencies) ---
 const Icons = {
   GraduationCap: ({ className }) => (

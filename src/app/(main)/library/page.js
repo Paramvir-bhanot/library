@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-
+import footer from '../../../app/components/UI/footer';
 // Theme configuration (mirrors your JSON)
 const theme = {
   primary: "#D4AF37",

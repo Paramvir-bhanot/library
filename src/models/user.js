@@ -30,6 +30,13 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+      default: null,
+    },
     provider: {
       type: String,
       enum: ['google', 'facebook', 'credentials'],
@@ -66,6 +73,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    lastlogin: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
@@ -90,4 +101,6 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // Prevent model recompilation in development
+export const Visitor = mongoose.models.Visitor || mongoose.model('Visitor', userSchema);
+
 export default mongoose.models.User || mongoose.model('User', userSchema);
