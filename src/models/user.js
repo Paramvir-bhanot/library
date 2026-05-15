@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
     },
     provider: {
       type: String,
-      enum: ['google', 'facebook', 'credentials'],
+      enum: ['google', 'facebook', 'github', 'credentials'],
       default: 'credentials',
     },
     applicantId: {

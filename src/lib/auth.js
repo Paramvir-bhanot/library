@@ -1,5 +1,6 @@
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
+import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "@/src/lib/DBconnection";
 import User from "@/src/models/user";
@@ -30,8 +31,18 @@ export const authOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           }),
         ]
+      : []),  
+
+
+    ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+      ? [
+         GitHubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+          }),
+        ]
       : []),
-    ...(process.env.FACEBOOK_CLIENT_ID && process.env.FACEBOOK_CLIENT_SECRET
+            ...(process.env.FACEBOOK_CLIENT_ID && process.env.FACEBOOK_CLIENT_SECRET
       ? [
           FacebookProvider({
             clientId: process.env.FACEBOOK_CLIENT_ID,
@@ -88,7 +99,8 @@ export const authOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account?.provider === "google" || account?.provider === "facebook") {
+      const oauthProviders = ["google", "facebook", "github"];
+      if (oauthProviders.includes(account?.provider)) {
         try {
           await connectDB();
           const existingUser = await User.findOne({ email: user.email });
@@ -117,8 +129,9 @@ export const authOptions = {
           // We need to fetch the fresh user data to get the applicantId (if it exists)
           // or leave it undefined if it doesn't
           const currentUser = existingUser || await User.findOne({ email: user.email });
+          user.id = currentUser._id.toString();
           user.applicantId = currentUser.applicantId?.toString();
-          
+
           return true;
         } catch (error) {
           console.error("Error saving user:", error);

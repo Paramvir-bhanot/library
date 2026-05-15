@@ -581,7 +581,9 @@ const Navbar = memo(() => {
                         {session?.user?.name || "Student"}
                       </p>
                       <p className="text-xs text-muted font-medium">
-                        {session?.user?.provider === "google" ? "Google Login" : "Premium Student"}
+                        {["google", "facebook", "github"].includes(session?.user?.provider)
+                          ? `${session.user.provider.charAt(0).toUpperCase()}${session.user.provider.slice(1)} Login`
+                          : "Premium Student"}
                       </p>
                     </div>
                   </button>

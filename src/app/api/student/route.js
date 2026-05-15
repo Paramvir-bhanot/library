@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-import { getUserData, setUserData } from "../../../lib/db"
+import { getUserData, setUserData } from "../../../../src/lib/DBconnection"
 
 export default async function handler(req, res) {
   // ✅ Get the session (contains Google ID)

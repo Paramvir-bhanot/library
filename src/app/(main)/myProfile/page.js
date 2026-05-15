@@ -13,6 +13,16 @@ export default function DashboardPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({
+    degree: '',
+    subject: '',
+    medium: '',
+    applicantId: '',
+    likedBooks: '',
+    savedNotes: '',
+    isSubscribed: false,
+  });
   const LOCAL_PROFILE_KEY = 'user_profile_v1';
 
   // Load cached profile from localStorage immediately for instant UI
@@ -69,6 +79,16 @@ export default function DashboardPage() {
           };
           
           setUser(combinedUser);
+          // initialize form for editing
+          setForm({
+            degree: combinedUser.degree || '',
+            subject: combinedUser.subject || '',
+            medium: combinedUser.medium || '',
+            applicantId: combinedUser.applicantId || '',
+            likedBooks: (combinedUser.likedBooks || []).join(', '),
+            savedNotes: (combinedUser.savedNotes || []).join(', '),
+            isSubscribed: combinedUser.isSubscribed || false,
+          });
           try { window.localStorage.setItem(LOCAL_PROFILE_KEY, JSON.stringify(combinedUser)); } catch (e) {}
           setError(null);
         } catch (err) {
@@ -98,6 +118,75 @@ export default function DashboardPage() {
       fetchUserProfile();
     }
   }, [status, session, router]);
+
+  // keep form in sync if user changes
+  useEffect(() => {
+    if (user) {
+      setForm({
+        degree: user.degree || '',
+        subject: user.subject || '',
+        medium: user.medium || '',
+        applicantId: user.applicantId || '',
+        likedBooks: (user.likedBooks || []).join(', '),
+        savedNotes: (user.savedNotes || []).join(', '),
+        isSubscribed: user.isSubscribed || false,
+      });
+    }
+  }, [user]);
+
+  async function handleSave() {
+    const payload = {
+      degree: form.degree,
+      subject: form.subject,
+      medium: form.medium,
+      applicantId: form.applicantId,
+      likedBooks: form.likedBooks ? form.likedBooks.split(',').map(s => s.trim()).filter(Boolean) : [],
+      savedNotes: form.savedNotes ? form.savedNotes.split(',').map(s => s.trim()).filter(Boolean) : [],
+      isSubscribed: !!form.isSubscribed,
+    };
+
+    try {
+      setLoading(true);
+      const res = await fetch('/api/student', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error('Failed to save profile');
+
+      const resJson = await res.json();
+      const updated = resJson.data || resJson;
+
+      const merged = { ...user, ...updated };
+      setUser(merged);
+      try { window.localStorage.setItem(LOCAL_PROFILE_KEY, JSON.stringify(merged)); } catch (e) {}
+      setEditing(false);
+      setError(null);
+    } catch (err) {
+      console.error('Save failed', err);
+      setError('Failed to save profile');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleCancel() {
+    // revert form to current user values
+    if (user) {
+      setForm({
+        degree: user.degree || '',
+        subject: user.subject || '',
+        medium: user.medium || '',
+        applicantId: user.applicantId || '',
+        likedBooks: (user.likedBooks || []).join(', '),
+        savedNotes: (user.savedNotes || []).join(', '),
+        isSubscribed: user.isSubscribed || false,
+      });
+    }
+    setEditing(false);
+    setError(null);
+  }
 
   if (loading) {
     return (
@@ -165,8 +254,36 @@ export default function DashboardPage() {
                 ? Subscribed
               </span>
             )}
+            {!editing ? (
+              <button
+                onClick={() => setEditing(true)}
+                className="ml-2 px-3 py-1 rounded text-sm bg-[#D4AF37] text-black font-medium"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <div className="ml-2 flex gap-2">
+                <button onClick={handleSave} className="px-3 py-1 rounded text-sm bg-[#D4AF37] text-black font-medium">Save</button>
+                <button onClick={handleCancel} className="px-3 py-1 rounded text-sm bg-[#111111] border border-[#333333] text-[#BFBFBF]">Cancel</button>
+              </div>
+            )}
           </div>
         </motion.header>
+
+        {editing && (
+          <section className="bg-[#0b0b0b] border border-[#333333] rounded-xl p-5 mt-4">
+            <h3 className="text-lg font-semibold text-[#D4AF37] mb-3">Edit Profile</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input value={form.degree} onChange={e => setForm(prev => ({...prev, degree: e.target.value}))} placeholder="Degree" className="p-2 bg-[#111111] border border-[#222] rounded" />
+              <input value={form.subject} onChange={e => setForm(prev => ({...prev, subject: e.target.value}))} placeholder="Subject" className="p-2 bg-[#111111] border border-[#222] rounded" />
+              <input value={form.medium} onChange={e => setForm(prev => ({...prev, medium: e.target.value}))} placeholder="Medium" className="p-2 bg-[#111111] border border-[#222] rounded" />
+              <input value={form.applicantId} onChange={e => setForm(prev => ({...prev, applicantId: e.target.value}))} placeholder="Applicant ID" className="p-2 bg-[#111111] border border-[#222] rounded" />
+              <input value={form.likedBooks} onChange={e => setForm(prev => ({...prev, likedBooks: e.target.value}))} placeholder="Liked books (comma separated)" className="p-2 col-span-1 sm:col-span-2 bg-[#111111] border border-[#222] rounded" />
+              <input value={form.savedNotes} onChange={e => setForm(prev => ({...prev, savedNotes: e.target.value}))} placeholder="Saved notes (comma separated)" className="p-2 col-span-1 sm:col-span-2 bg-[#111111] border border-[#222] rounded" />
+            </div>
+            {error && <p className="text-red-400 mt-3">{error}</p>}
+          </section>
+        )}
 
         {/* Stats / Quick Info Cards */}
         <motion.div

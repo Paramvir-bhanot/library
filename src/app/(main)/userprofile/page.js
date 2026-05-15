@@ -55,6 +55,8 @@ export default function ProfilePage() {
       ? 'Google'
       : user?.provider === 'facebook'
       ? 'Facebook'
+      : user?.provider === 'github'
+      ? 'GitHub'
       : 'Credentials';
 
   return (

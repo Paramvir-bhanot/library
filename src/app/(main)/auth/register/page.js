@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -213,6 +214,47 @@ export default function RegisterPage() {
       textDecoration: 'none',
       cursor: 'pointer',
     },
+    oauthSection: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.75rem',
+      marginBottom: '1.25rem',
+    },
+    oauthBtn: {
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '0.6rem',
+      padding: '0.7rem',
+      background: 'rgba(255,255,255,0.06)',
+      border: `1px solid ${theme.borderLight}`,
+      borderRadius: '6px',
+      color: theme.textPrimary,
+      fontSize: '0.9rem',
+      fontWeight: 500,
+      cursor: 'pointer',
+      transition: 'background 0.2s ease',
+    },
+    divider: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.75rem',
+      margin: '0.25rem 0 1rem',
+    },
+    dividerLine: {
+      flex: 1,
+      height: '1px',
+      background: theme.borderLight,
+    },
+    dividerText: {
+      color: theme.textSecondary,
+      fontSize: '0.8rem',
+    },
+  };
+
+  const handleOAuthSignIn = (provider) => {
+    signIn(provider, { callbackUrl: '/' });
   };
 
   const handleChange = (e) => {
@@ -296,6 +338,41 @@ export default function RegisterPage() {
               <p style={styles.redirectText}>Redirecting to login...</p>
             </div>
           ) : (
+            <>
+            <div style={styles.oauthSection}>
+              <button
+                type="button"
+                style={styles.oauthBtn}
+                onClick={() => handleOAuthSignIn('google')}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+              >
+                Continue with Google
+              </button>
+              <button
+                type="button"
+                style={styles.oauthBtn}
+                onClick={() => handleOAuthSignIn('facebook')}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+              >
+                Continue with Facebook
+              </button>
+              <button
+                type="button"
+                style={styles.oauthBtn}
+                onClick={() => handleOAuthSignIn('github')}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+              >
+                Continue with GitHub
+              </button>
+            </div>
+            <div style={styles.divider}>
+              <div style={styles.dividerLine} />
+              <span style={styles.dividerText}>or</span>
+              <div style={styles.dividerLine} />
+            </div>
             <form onSubmit={handleSubmit} style={styles.form}>
               <div style={styles.formGroup}>
                 <label htmlFor="name" style={styles.label}>Full Name</label>
@@ -391,6 +468,7 @@ export default function RegisterPage() {
                 <a href="/login" style={styles.link}>Sign in here</a>
               </div>
             </form>
+            </>
           )}
 
           <p style={styles.footer}>
