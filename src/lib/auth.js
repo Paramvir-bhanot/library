@@ -7,6 +7,40 @@ import User from "@/src/models/user";
 // import Applicant from "@/models/applicant";
 import bcrypt from "bcryptjs";
 
+async function resolveOAuthProfile(user, account, profile) {
+  const name = user?.name || profile?.name || profile?.login || "OAuth User";
+  const image =
+    user?.image || profile?.picture || profile?.avatar_url || profile?.image || null;
+  let email = user?.email || profile?.email || null;
+
+  if (!email && account?.provider === "github" && account?.access_token) {
+    try {
+      const response = await fetch("https://api.github.com/user/emails", {
+        headers: {
+          Authorization: `Bearer ${account.access_token}`,
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      });
+
+      if (response.ok) {
+        const emails = await response.json();
+        const primaryEmail = Array.isArray(emails)
+          ? emails.find((item) => item.primary && item.verified) ||
+            emails.find((item) => item.verified) ||
+            emails[0]
+          : null;
+
+        email = primaryEmail?.email || email;
+      }
+    } catch (error) {
+      console.error("Error resolving GitHub email:", error);
+    }
+  }
+
+  return { name, email, image };
+}
+
 // Auto-set NEXTAUTH_URL for local development
 if (!process.env.NEXTAUTH_URL) {
   if (process.env.VERCEL_URL) {
@@ -102,6 +136,17 @@ export const authOptions = {
       const oauthProviders = ["google", "facebook", "github"];
       if (oauthProviders.includes(account?.provider)) {
         try {
+          const resolvedProfile = await resolveOAuthProfile(user, account, profile);
+          user.name = resolvedProfile.name;
+          user.email = resolvedProfile.email;
+          user.image = resolvedProfile.image;
+
+          if (!user.email) {
+            throw new Error(
+              "GitHub did not return an email address. Please make sure your GitHub account has a verified public email or private email access enabled."
+            );
+          }
+
           await connectDB();
           const existingUser = await User.findOne({ email: user.email });
 
@@ -145,7 +190,7 @@ export const authOptions = {
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.image = user.image || profile?.picture || profile?.image;
+        token.image = user.image || profile?.picture || profile?.avatar_url || profile?.image;
         token.provider = account?.provider;
         token.applicantId = user.applicantId;
       }
