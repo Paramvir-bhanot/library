@@ -117,7 +117,7 @@ export default function DashboardPage() {
     const fetchProfile = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/admin/adminorder/profile', {
+        const response = await fetch('/api/myprofile', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         });
@@ -178,7 +178,7 @@ export default function DashboardPage() {
       setError(null);
 
       const method = profile?._id ? 'PUT' : 'POST';
-      const response = await fetch('/api/admin/adminorder/profile', {
+      const response = await fetch('/api/myprofile', {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -193,7 +193,7 @@ export default function DashboardPage() {
 
       if (!response.ok) {
         if (method === 'POST' && responseData?.error?.toLowerCase().includes('exists')) {
-          const retryResponse = await fetch('/api/admin/adminorder/profile', {
+          const retryResponse = await fetch('/api/myprofile', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),

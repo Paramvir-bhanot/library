@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 /* ============================================================
    CONFIGURATION – Adjust the API endpoint to match your route
    ============================================================ */
-const API_URL = "/api/myProfile/get"; // Change to your actual crew/student profiles endpoint
+const API_URL = "/api/admin/adminorder/get"; // Change to your actual crew/student profiles endpoint
 const ITEMS_PER_PAGE = 12;
 
 /* ============================================================

@@ -3,7 +3,7 @@ import { authOptions } from "@/src/lib/auth";
 import connectDB from "@/src/lib/DBconnection";
 import User from "@/src/models/user";
 import StudentProfile from "@/src/models/crewMembers";
-import vistor from "../../../../../src/models/vistor"; // Adjust path based on your project structure
+import vistor from "@/src/models/vistor";
 
 // GET - Fetch crew member profile for authenticated user
 export async function GET(req) {
