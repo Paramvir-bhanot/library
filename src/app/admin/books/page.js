@@ -4,6 +4,9 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BOOK_CATEGORY_OPTIONS, isValidBookCategory } from '@/src/lib/bookCategories';
+import { BOOK_CLASSES, BOOK_SUBJECTS } from '@/src/lib/bookConstants';
+
+const SEMESTER_OPTIONS = Array.from({ length: 12 }, (_, index) => index + 1);
 export default function BooksPage() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,6 +24,9 @@ export default function BooksPage() {
     author: '',
     description: '',
     category: '',
+    bookClass: '',
+    subject: '',
+    semester: '',
     price: '',
     pages: '',
     language: 'English',
@@ -149,6 +155,9 @@ export default function BooksPage() {
       data.append('author', formData.author);
       data.append('description', formData.description);
       data.append('category', formData.category);
+      data.append('bookClass', formData.bookClass);
+      data.append('subject', formData.subject);
+      data.append('semester', formData.semester);
       data.append('price', formData.price);
       data.append('pages', formData.pages);
       data.append('language', formData.language);
@@ -214,6 +223,9 @@ export default function BooksPage() {
       author: book.author || '',
       description: book.description || '',
       category: book.category || '',
+      bookClass: book.bookClass || '',
+      subject: book.subject || '',
+      semester: book.semester ? String(book.semester) : '',
       price: book.price || '',
       pages: book.pages || '',
       language: book.language || 'English',
@@ -246,6 +258,9 @@ export default function BooksPage() {
       data.append('author', formData.author);
       data.append('description', formData.description);
       data.append('category', formData.category);
+      data.append('bookClass', formData.bookClass);
+      data.append('subject', formData.subject);
+      data.append('semester', formData.semester);
       data.append('price', formData.price);
       data.append('pages', formData.pages);
       data.append('language', formData.language);
@@ -329,6 +344,9 @@ export default function BooksPage() {
       author: '',
       description: '',
       category: '',
+      bookClass: '',
+      subject: '',
+      semester: '',
       price: '',
       pages: '',
       language: 'English',
@@ -613,6 +631,24 @@ function BookCard({ book, index, onEdit, onDelete }) {
               <span>{book.category}</span>
             </div>
           )}
+          {book.semester && (
+            <div className="flex items-center gap-2">
+              <span>🎓</span>
+              <span>Semester {book.semester}</span>
+            </div>
+          )}
+          {book.bookClass && (
+            <div className="flex items-center gap-2">
+              <span>📘</span>
+              <span>{book.bookClass}</span>
+            </div>
+          )}
+          {book.subject && (
+            <div className="flex items-center gap-2">
+              <span>📑</span>
+              <span>{book.subject}</span>
+            </div>
+          )}
           {book.rating && (
             <div className="flex items-center gap-2">
               <span className="text-[#FFB300]">⭐</span>
@@ -780,6 +816,54 @@ function BookForm({
                 <option>Chinese</option>
                 <option>Hindi</option>
                 <option>Other</option>
+              </select>
+            </FormField>
+
+            <FormField label="Book Class">
+              <select
+                name="bookClass"
+                value={formData.bookClass}
+                onChange={onInputChange}
+                className="w-full bg-[#0a0a0a] border border-[#333333] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
+              >
+                <option value="">Select class (optional)</option>
+                {BOOK_CLASSES.map((bookClass) => (
+                  <option key={bookClass} value={bookClass}>
+                    {bookClass}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+
+            <FormField label="Subject">
+              <select
+                name="subject"
+                value={formData.subject}
+                onChange={onInputChange}
+                className="w-full bg-[#0a0a0a] border border-[#333333] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
+              >
+                <option value="">Select subject (optional)</option>
+                {BOOK_SUBJECTS.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+
+            <FormField label="Semester">
+              <select
+                name="semester"
+                value={formData.semester}
+                onChange={onInputChange}
+                className="w-full bg-[#0a0a0a] border border-[#333333] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
+              >
+                <option value="">Select semester (optional)</option>
+                {SEMESTER_OPTIONS.map((semester) => (
+                  <option key={semester} value={semester}>
+                    Semester {semester}
+                  </option>
+                ))}
               </select>
             </FormField>
           </div>

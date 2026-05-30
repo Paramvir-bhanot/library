@@ -34,6 +34,7 @@ export default function RootLayout({ children }) {
           </ProtectedAdminRoute>
         </UserProvider>
       </body>
+      <review />
     </html>
   );
 }

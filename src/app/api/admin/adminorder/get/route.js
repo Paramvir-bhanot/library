@@ -1,20 +1,7 @@
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
-import User from '../../../../models/user'; // Adjust path based on your project structure
-
-// Database connection function
-async function connectDB() {
-  if (mongoose.connection.readyState === 1) {
-    return;
-  }
-  
-  try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/yourdb');
-  } catch (error) {
-    console.error('Database connection error:', error);
-    throw error;
-  }
-}
+import User from '@/src/models/user';
+import connectDB from '@/src/lib/DBconnection';
 
 export async function GET(request) {
   try {

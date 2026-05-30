@@ -5,6 +5,7 @@ import path from 'path';
 import Book from '@/src/models/books';
 import connectDB from '@/src/lib/DBconnection';
 import { isValidBookCategory } from '@/src/lib/bookCategories';
+import { parseBookFields } from '@/src/lib/parseBookFields';
 
 const UPLOAD_DIR = path.join(process.cwd(), 'public/uploads');
 
@@ -28,42 +29,6 @@ async function saveCoverImage(file) {
   await writeFile(filePath, buffer);
 
   return `/uploads/${fileName}`;
-}
-
-function parseBookFields(formData) {
-  const parsed = {};
-  const fields = [
-    'title',
-    'author',
-    'description',
-    'category',
-    'price',
-    'publishedDate',
-    'pages',
-    'language',
-    'rating',
-  ];
-
-  fields.forEach((field) => {
-    const value = formData.get(field);
-    if (value === null || value === '') {
-      return;
-    }
-
-    if (field === 'price' || field === 'pages' || field === 'rating') {
-      parsed[field] = Number(value);
-      return;
-    }
-
-    if (field === 'publishedDate') {
-      parsed[field] = new Date(value);
-      return;
-    }
-
-    parsed[field] = value;
-  });
-
-  return parsed;
 }
 
 export async function GET() {

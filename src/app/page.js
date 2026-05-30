@@ -1,9 +1,9 @@
 "use client";
-
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
-
+import Footer from "../../src/app/components/UI/footer";
+import Review from '../../src/app/components/home/review';
 // Reusable animation variants
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -26,6 +26,7 @@ export default function HomePage() {
       <FeaturedBooks />
       <CategoriesSection />
       <NewsletterCTA />
+      <Review />
       <Footer />
     </main>
   );
@@ -91,6 +92,7 @@ function HeroSection() {
         </motion.div>
       </div>
     </section>
+    
   );
 }
 
@@ -265,50 +267,7 @@ function NewsletterCTA() {
         </motion.div>
       </div>
     </section>
+    
   );
 }
 
-// ---------- Footer ----------
-function Footer() {
-  return (
-    <footer className="bg-black border-t border-border-light py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div>
-            <h4 className="font-serif text-primary text-lg mb-4">My Library Hub</h4>
-            <p className="text-text-secondary text-sm">
-              Your gateway to infinite stories.
-            </p>
-          </div>
-          <div>
-            <h5 className="font-medium mb-3">Explore</h5>
-            <ul className="space-y-2 text-sm text-text-secondary">
-              <li><a href="#" className="hover:text-primary transition">Catalog</a></li>
-              <li><a href="#" className="hover:text-primary transition">New Releases</a></li>
-              <li><a href="#" className="hover:text-primary transition">Bestsellers</a></li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="font-medium mb-3">Support</h5>
-            <ul className="space-y-2 text-sm text-text-secondary">
-              <li><a href="#" className="hover:text-primary transition">Help Center</a></li>
-              <li><a href="#" className="hover:text-primary transition">Contact Us</a></li>
-              <li><a href="#" className="hover:text-primary transition">FAQs</a></li>
-            </ul>
-          </div>
-          <div>
-            <h5 className="font-medium mb-3">Legal</h5>
-            <ul className="space-y-2 text-sm text-text-secondary">
-              <li><a href="#" className="hover:text-primary transition">Privacy</a></li>
-              <li><a href="#" className="hover:text-primary transition">Terms</a></li>
-              <li><a href="#" className="hover:text-primary transition">Accessibility</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="mt-10 pt-6 border-t border-border-light text-center text-text-secondary/60 text-sm">
-          © {new Date().getFullYear()} My Library Hub. All rights reserved.
-        </div>
-      </div>
-    </footer>
-  );
-}

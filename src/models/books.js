@@ -1,83 +1,6 @@
 import mongoose from 'mongoose';
 import { ALLOWED_BOOK_CATEGORIES } from '@/src/lib/bookCategories';
-
-const BOOK_CLASSES = [
-  'B.A',
-  'M.A',
-  'B.Lib.I.Sc',
-  'M.Lib.I.Sc',
-  'BCA',
-  'MCA',
-  'B.COM',
-  'M.COM',
-  'BBA',
-  'MBA',
-  'BSC.IT',
-  'MSC.IT',
-];
-
-const BOOK_LANGUAGES = ['Hindi', 'English', 'Punjabi'];
-
-const BOOK_SUBJECTS = [
-  'English',
-  'Political Science',
-  'History',
-  'Sociology',
-  'Economics',
-  'Punjabi',
-  'English Literature',
-  'Political Theory',
-  'Modern History',
-  'Social Research',
-  'Public Administration',
-  'Library Classification',
-  'Cataloguing',
-  'Information Sources',
-  'Library Management',
-  'Digital Libraries',
-  'Information Technology in Libraries',
-  'Research Methodology',
-  'Knowledge Management',
-  'Academic Library Systems',
-  'Programming in C',
-  'Data Structures',
-  'Database Management System',
-  'Operating System',
-  'Computer Networks',
-  'Web Development',
-  'Advanced Java',
-  'Software Engineering',
-  'Cloud Computing',
-  'Machine Learning',
-  'Cyber Security',
-  'Financial Accounting',
-  'Business Law',
-  'Taxation',
-  'Auditing',
-  'Corporate Finance',
-  'Advanced Accounting',
-  'International Business',
-  'Financial Management',
-  'Marketing Management',
-  'Human Resource Management',
-  'Business Communication',
-  'Entrepreneurship',
-  'Organizational Behavior',
-  'Strategic Management',
-  'Finance Management',
-  'Operations Management',
-  'Digital Marketing',
-  'Business Analytics',
-  'Computer Fundamentals',
-  'Programming',
-  'Networking',
-  'Database Systems',
-  'Web Technologies',
-  'Advanced Networking',
-  'Artificial Intelligence',
-  'Big Data',
-  'Information Security',
-];
+import { BOOK_CLASSES, BOOK_LANGUAGES, BOOK_SUBJECTS } from '@/src/lib/bookConstants';
 
 const bookSchema = new mongoose.Schema(
   {
@@ -110,6 +33,11 @@ const bookSchema = new mongoose.Schema(
         values: BOOK_SUBJECTS,
         message: 'Subject must be a valid value from book.md',
       },
+    },
+    semester: {
+      type: Number,
+      min: [1, 'Semester must be at least 1'],
+      max: [12, 'Semester cannot exceed 12'],
     },
     description: {
       type: String,
@@ -203,6 +131,7 @@ const bookSchema = new mongoose.Schema(
 // Create a compound index for better query performance
 bookSchema.index({ author: 1, category: 1 });
 bookSchema.index({ bookClass: 1, subject: 1 });
+bookSchema.index({ bookClass: 1, subject: 1, semester: 1 });
 bookSchema.index({ uploadedBy: 1, uploadedDate: -1 });
 bookSchema.index({ title: 'text', description: 'text' });
 

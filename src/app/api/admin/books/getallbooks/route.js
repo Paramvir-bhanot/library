@@ -7,7 +7,9 @@ export async function GET() {
     await connectDB();
 
     const books = await Book.find()
-      .select('title category rating publishedDate downloads coverImage pdfUrl')
+      .select(
+        'title category bookClass subject semester rating publishedDate downloads coverImage pdfUrl'
+      )
       .sort({ publishedDate: -1 })
       .lean();
 

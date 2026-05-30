@@ -52,7 +52,7 @@ const mainNavLinks = [
   { name: "Home", href: "/", icon: Home, category: "main" },
   { name: "About", href: "/about", icon: Info, category: "main" },
   { name: "Courses", href: "/course", icon: BookOpen, category: "main" },
-  { name: "Explore", href: "/explore", icon: TrendingUp, category: "main" },
+  { name: "Notes", href: "/notes", icon: TrendingUp, category: "main" },
   { name: "Library", href: "/library", icon: FileText, category: "main" },
 ];
 
@@ -63,7 +63,7 @@ const allNavLinks = [...mainNavLinks, ...departmentNavLinks];
 const quickActions = [
   { name: "Courses", icon: BookOpen, href: "/course", color: "primary" },
   { name: "Departments", icon: FolderKanban, href: "/course", color: "secondary" },
-  { name: "Explore", icon: TrendingUp, href: "/explore", color: "accent" },
+  { name: "Notes", icon: TrendingUp, href: "/notes", color: "accent" },
   { name: "About", icon: Info, href: "/about", color: "muted" },
 ];
 
@@ -606,7 +606,7 @@ const Navbar = memo(() => {
                 ) : (
                   <div className="p-4 rounded-2xl mb-6 border border-border animate-fadeIn" style={{ background: "var(--background)" }}>
                     <h3 className="font-bold text-lg text-text mb-2">Welcome to Books Junction</h3>
-                    <p className="text-sm text-muted mb-4">Explore courses, departments, and study options in Distance / Online mode.</p>
+                    <p className="text-sm text-muted mb-4"> courses, departments, and study options in Distance / Online mode.</p>
                     <div className="flex space-x-3">
                       <button
                         onClick={() => { router.push("/auth/userlogin"); setIsOpen(false); }}

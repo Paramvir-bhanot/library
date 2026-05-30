@@ -132,9 +132,47 @@ export default async function CourseDetailsPage({ params }) {
           <p className="mt-4 max-w-3xl text-[#cccccc]">{course.description}</p>
         </header>
 
+        {course.syllabus?.semester_wise?.length > 0 && (
+          <section className="mt-8 rounded-2xl border border-[#2f2f2f] bg-[#0f0f0f] p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-2xl font-semibold text-white">Semester-wise Syllabus</h2>
+              <p className="text-sm text-[#bfbfbf]">Browse subjects by semester</p>
+            </div>
+
+            <div className="space-y-6">
+              {course.syllabus.semester_wise.map((semesterBlock) => (
+                <div
+                  key={semesterBlock.semester}
+                  className="rounded-xl border border-[#323232] bg-black p-4 md:p-5"
+                >
+                  <h3 className="text-lg font-semibold text-[#d4af37]">
+                    Semester {semesterBlock.semester}
+                  </h3>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    {semesterBlock.subjects.map((subject) => (
+                      <Link
+                        key={`${semesterBlock.semester}-${subject.name}`}
+                        href={`/course/${course.slug}/${toSlug(subject.name)}?semester=${semesterBlock.semester}`}
+                        className="rounded-lg border border-[#323232] bg-[#0f0f0f] p-4 transition-colors hover:border-[#d4af37]"
+                      >
+                        <p className="font-medium text-white">{subject.name}</p>
+                        {subject.description && (
+                          <p className="mt-2 line-clamp-2 text-sm text-[#bcbcbc]">
+                            {subject.description}
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className="mt-8 rounded-2xl border border-[#2f2f2f] bg-[#0f0f0f] p-6">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <h2 className="text-2xl font-semibold text-white">Select a Subject</h2>
+            <h2 className="text-2xl font-semibold text-white">All Subjects</h2>
             <p className="text-sm text-[#bfbfbf]">Choose a subject to open matching PDF books</p>
           </div>
 

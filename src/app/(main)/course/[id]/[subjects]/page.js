@@ -31,7 +31,25 @@ function normalize(value) {
 	return (value || "").toString().trim().toLowerCase();
 }
 
-async function getRelatedBooks(course, subjectName) {
+function findSubjectName(course, subjectSlug) {
+	const fromFlatList = course.subjects.find((subject) => toSlug(subject) === subjectSlug);
+	if (fromFlatList) {
+		return fromFlatList;
+	}
+
+	for (const semesterBlock of course.syllabus?.semester_wise || []) {
+		const fromSemester = semesterBlock.subjects.find(
+			(subject) => toSlug(subject.name) === subjectSlug
+		);
+		if (fromSemester) {
+			return fromSemester.name;
+		}
+	}
+
+	return null;
+}
+
+async function getRelatedBooks(course, subjectName, semesterNumber) {
 	await connectDB();
 
 	const books = await Book.find({}).lean();
@@ -45,6 +63,10 @@ async function getRelatedBooks(course, subjectName) {
 		const bookTitle = normalize(book.title);
 		const bookCategory = normalize(book.category);
 		const bookClass = normalize(book.bookClass);
+
+		if (semesterNumber && book.semester && book.semester !== semesterNumber) {
+			return false;
+		}
 
 		const subjectMatch =
 			bookSubject === subject ||
@@ -69,28 +91,39 @@ async function getRelatedBooks(course, subjectName) {
 		return courseMatch || !bookClass;
 	});
 
-	const fallback = books.filter((book) => normalize(book.subject) === subject);
+	const fallback = books.filter((book) => {
+		if (semesterNumber && book.semester && book.semester !== semesterNumber) {
+			return false;
+		}
+
+		return normalize(book.subject) === subject;
+	});
+
 	return [...matches, ...fallback].filter(
 		(book, index, array) => array.findIndex((item) => String(item._id) === String(book._id)) === index
 	);
 }
 
-export default async function SubjectPage({ params }) {
+export default async function SubjectPage({ params, searchParams }) {
 	const { id, subjects } = await params;
+	const resolvedSearchParams = await searchParams;
 	const courseSlug = decodeURIComponent(id || "").toLowerCase();
 	const subjectSlug = decodeURIComponent(subjects || "").toLowerCase();
+	const semesterParam = resolvedSearchParams?.semester;
+	const semesterNumber =
+		semesterParam && !Number.isNaN(Number(semesterParam)) ? Number(semesterParam) : null;
 
 	const course = getAllCourses().find((item) => item.slug === courseSlug);
 	if (!course) {
 		notFound();
 	}
 
-	const subjectName = course.subjects.find((subject) => toSlug(subject) === subjectSlug);
+	const subjectName = findSubjectName(course, subjectSlug);
 	if (!subjectName) {
 		notFound();
 	}
 
-	const relatedBooks = await getRelatedBooks(course, subjectName);
+	const relatedBooks = await getRelatedBooks(course, subjectName, semesterNumber);
 
 	return (
 		<main className="min-h-screen bg-black px-4 py-10 text-white md:px-8 lg:px-12">
@@ -120,9 +153,13 @@ export default async function SubjectPage({ params }) {
 					<h1 className="mt-3 text-3xl font-bold md:text-5xl">{subjectName}</h1>
 					<p className="mt-3 text-base text-[#cfcfcf] md:text-lg">
 						{course.course_name} - {course.department}
+						{semesterNumber ? ` · Semester ${semesterNumber}` : ""}
 					</p>
 					<p className="mt-4 max-w-3xl text-[#cccccc]">
 						Matching PDF books related to this subject are listed below.
+						{semesterNumber
+							? " Books tagged with this semester are shown first."
+							: ""}
 					</p>
 				</header>
 
@@ -162,6 +199,11 @@ export default async function SubjectPage({ params }) {
 									)}
 
 									<div className="mt-4 flex flex-wrap gap-2 text-xs text-[#bfbfbf]">
+										{book.semester && (
+											<span className="rounded-full border border-[#2f2f2f] px-2 py-1">
+												Semester {book.semester}
+											</span>
+										)}
 										{book.bookClass && (
 											<span className="rounded-full border border-[#2f2f2f] px-2 py-1">
 												{book.bookClass}
@@ -201,6 +243,11 @@ export default async function SubjectPage({ params }) {
 									)}
 
 									<div className="mt-4 flex flex-wrap gap-2 text-xs text-[#bfbfbf]">
+										{book.semester && (
+											<span className="rounded-full border border-[#2f2f2f] px-2 py-1">
+												Semester {book.semester}
+											</span>
+										)}
 										{book.bookClass && (
 											<span className="rounded-full border border-[#2f2f2f] px-2 py-1">
 												{book.bookClass}

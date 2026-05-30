@@ -17,7 +17,7 @@ books junction
                     allcourses
                         page.js
                     page.js
-                explore
+                Notes
                     page.js
                 library
                     page.js
